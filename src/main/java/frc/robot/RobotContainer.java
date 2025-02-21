@@ -30,6 +30,7 @@ import frc.robot.subsystems.swerve.SwerveBase;
 import frc.lib.util.XboxController2;
 import edu.wpi.first.wpilibj.Servo;
 import frc.robot.subsystems.LinearServo;
+import frc.robot.subsystems.Vision;
 
 public class RobotContainer {
     /* Shuffleboard */
@@ -45,6 +46,7 @@ public class RobotContainer {
     // private final UsbCamera camera;
     // private final Servo linearActuator = new Servo(1);
     private final LinearServo coralServo = new LinearServo(1);
+    private final Vision vision = new Vision();
 
     /* Commands */
     // private final Command AUTO_Path = new Auto(s_Swerve, shooter, intake).Path();
@@ -76,6 +78,7 @@ public class RobotContainer {
         // camera = CameraServer.startAutomaticCapture(0);
         // camera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
 
+        vision.startVision();
 
         // Configure the button bindings
         configureDefaultCommands();
