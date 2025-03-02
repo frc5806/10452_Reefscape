@@ -29,6 +29,7 @@ import frc.robot.auto.Auto;
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.Intake.AutoIntake;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.swerve.SwerveBase;
 import frc.lib.util.XboxController2;
@@ -44,7 +45,7 @@ public class RobotContainer {
     public static ShuffleboardTab autoTab = Shuffleboard.getTab("Auto");
     /* Controllers */
     private final XboxController2 controller = new XboxController2(0);
-    private final XboxController2 controller2 = new XboxController2(3);
+    private final XboxController2 controller2 = new XboxController2(1);
     /* Drive Controls */
     private final double speedMod = 1;
     /* Subsystems */ 
@@ -57,9 +58,11 @@ public class RobotContainer {
     private SparkMax coralMotor = new SparkMax(13, MotorType.kBrushless);
     private SparkMax algaeMotor = new SparkMax(12, MotorType.kBrushless);
 
-    private SparkMax elevatorMotor1 = new SparkMax(2, MotorType.kBrushless);
-    private SparkMax elevatorMotor2 = new SparkMax(3, MotorType.kBrushless);
+    // private SparkMax elevatorMotor1 = new SparkMax(2, MotorType.kBrushless);
+    // private SparkMax elevatorMotor2 = new SparkMax(3, MotorType.kBrushless);
     private SparkMaxConfig elevatorConfig = new SparkMaxConfig();
+
+    private final Elevator elevator = new Elevator();
 
     private final Vision vision = new Vision();
 
@@ -98,8 +101,8 @@ public class RobotContainer {
         // Configure the button bindings
         elevatorConfig.idleMode(IdleMode.kBrake);
 
-        elevatorMotor1.configure(elevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        elevatorMotor2.configure(elevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        // elevatorMotor1.configure(elevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        // elevatorMotor2.configure(elevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         configureDefaultCommands();
         configureButtonBindings();
@@ -116,6 +119,10 @@ public class RobotContainer {
                 () -> true
             )
         );
+
+        // elevator.setDefaultCommand(
+        //     new ElevatorHardstop(elevator, () -> -controller2.getLeftY())
+        //   );
     }
 
     /**
@@ -126,30 +133,38 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
 //--------------------------------------- Controller 1 ----------------------------------------------------------
-        // controller.b().onTrue(new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0,0, new Rotation2d()))));
+        controller.b().onTrue(new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0,0, new Rotation2d()))));
 
-        // controller.x().onTrue(new InstantCommand(() -> linearActuator.set(0.8)));
-        // controller.a().onTrue(new InstantCommand(() -> linearActuator.set(0.2)));
-        // controller.y().onTrue(new InstantCommand(() -> System.out.println(linearActuator.get())));
-        controller.x().onTrue(new InstantCommand(() -> coralServo.set(1)));
-        controller.a().onTrue(new InstantCommand(() -> coralServo.set(0.1)));
-        controller.y().onTrue(new InstantCommand(() -> algaeServo.set(0.5)));
-        controller.b().onTrue(new InstantCommand(() -> algaeServo.set(0)));
+        // controller.a().onTrue(elevator.setElevatorPosition(-25));
+        // controller.x().onTrue(elevator.setElevatorPosition(-2));
+        controller.povUp().onTrue(elevator.setElevatorPosition(-25));
+        controller.povLeft().onTrue(elevator.setElevatorPosition(-15));
+        controller.povDown().onTrue(elevator.setElevatorPosition(-10));
+        controller.povRight().onTrue(elevator.setElevatorPosition(-5));
+        controller.y().onTrue(new InstantCommand(() -> System.out.println(elevator.getEncoderPos())));
+        // controller.a().onTrue(elevator.setElevatorPosition(0));
+
+        controller2.start().onTrue(new InstantCommand(() -> elevator.hardstop()));
+
+        controller2.x().onTrue(new InstantCommand(() -> coralServo.set(1)));
+        controller2.a().onTrue(new InstantCommand(() -> coralServo.set(0.1)));
+        controller2.y().onTrue(new InstantCommand(() -> algaeServo.set(0.5)));
+        controller2.b().onTrue(new InstantCommand(() -> algaeServo.set(0)));
     
-        controller.leftBumper().whileTrue(new InstantCommand(() -> coralMotor.set(0.2)));
-        controller.leftBumper().whileFalse(new InstantCommand(() -> coralMotor.set(0)));
-        controller.leftTrigger().whileTrue(new InstantCommand(() -> coralMotor.set(-0.2)));
-        controller.leftTrigger().whileFalse(new InstantCommand(() -> coralMotor.set(0)));
+        controller2.leftBumper().whileTrue(new InstantCommand(() -> coralMotor.set(0.2)));
+        controller2.leftBumper().whileFalse(new InstantCommand(() -> coralMotor.set(0)));
+        controller2.leftTrigger().whileTrue(new InstantCommand(() -> coralMotor.set(-0.2)));
+        controller2.leftTrigger().whileFalse(new InstantCommand(() -> coralMotor.set(0)));
 
 
-        controller.rightBumper().whileTrue(new InstantCommand(() -> algaeMotor.set(0.6)));
-        controller.rightBumper().whileFalse(new InstantCommand(() -> algaeMotor.set(0)));
-        controller.rightTrigger().whileTrue(new InstantCommand(() -> algaeMotor.set(-0.6)));
-        controller.rightTrigger().whileFalse(new InstantCommand(() -> algaeMotor.set(0)));
+        controller2.rightBumper().whileTrue(new InstantCommand(() -> algaeMotor.set(0.6)));
+        controller2.rightBumper().whileFalse(new InstantCommand(() -> algaeMotor.set(0)));
+        controller2.rightTrigger().whileTrue(new InstantCommand(() -> algaeMotor.set(-0.6)));
+        controller2.rightTrigger().whileFalse(new InstantCommand(() -> algaeMotor.set(0)));
 
 
-        controller.povDown().whileTrue(new InstantCommand(() -> {elevatorMotor1.set(0.1); elevatorMotor2.set(-0.1);}));
-        controller.povUp().whileTrue(new InstantCommand(() -> {elevatorMotor1.set(-0.1); elevatorMotor2.set(0.1);}));
+        // controller2.povDown().whileTrue(new InstantCommand(() -> {elevatorMotor1.set(0.1); elevatorMotor2.set(-0.1);}));
+        // controller2.povUp().whileTrue(new InstantCommand(() -> {elevatorMotor1.set(-0.1); elevatorMotor2.set(0.1);}));
 
 
         // controller.y().onTrue(new InstantCommand(() -> System.out.println(coralServo.get())));

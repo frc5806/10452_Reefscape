@@ -215,13 +215,21 @@ public final class Constants {
     // SPARK MAXES NOT WORKING: 8, 13, 10, 12
 
     public static final class ElevatorConstants {
-        public static final int kElevatorMotorPort1 = 12; // 12
-        public static final int kElevatorMotorPort2 = 17; // 10
+        public static final int kElevatorMotorPort0 = 2; // 12
+        public static final int kElevatorMotorPort1 = 3; // 10
 
         // TODO: Test PID values
-        public static final double elevatorkP = 0.5;
-        public static final double elevatorkI = 0.00004;
-        public static final double elevatorKD = 0.00004; 
+        public static final double elevatorKP = 0.03;
+        public static final double elevatorKI = 0;
+        public static final double elevatorKD = 0.2; 
+
+        public static final int elevatorContinuousCurrentLimit = 40;
+        public static final boolean elevatorInverted = true;
+        public static final IdleMode elevatorIdleMode = IdleMode.kBrake;
+        public static final double elevatorPower = 1;
+
+        public static final int maxElevatorPos = 250;
+        public static final int minElevatorPos = 8;
     }
 
     public static final class PivotConstants {
