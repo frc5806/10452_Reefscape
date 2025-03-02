@@ -116,7 +116,7 @@ public class RobotContainer {
                 () -> -controller.getLeftX() * speedMod,
                 () -> -controller.getRightX() * speedMod,
                 () -> controller.y().getAsBoolean(),//controller.getRawButtonPressed(XboxController.Button.kY.value),
-                () -> true
+                () -> false
             )
         );
 
@@ -140,7 +140,7 @@ public class RobotContainer {
         controller.povUp().onTrue(elevator.setElevatorPosition(-25));
         controller.povLeft().onTrue(elevator.setElevatorPosition(-15));
         controller.povDown().onTrue(elevator.setElevatorPosition(-10));
-        controller.povRight().onTrue(elevator.setElevatorPosition(-5));
+        controller.povRight().onTrue(elevator.setElevatorPosition(-2));
         controller.y().onTrue(new InstantCommand(() -> System.out.println(elevator.getEncoderPos())));
         // controller.a().onTrue(elevator.setElevatorPosition(0));
 

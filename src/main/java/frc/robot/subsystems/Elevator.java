@@ -78,6 +78,13 @@ public class Elevator extends SubsystemBase {
     } 
 
     public Command setElevatorPosition(double setpoint) {
+        // If the elevator is set to the bottom, turn the motor off
+        if (setpoint == -2) {
+            return run(
+                () -> { elevatorMotor0.set(0); elevatorMotor1.set(0);}
+            );
+        }
+    
         return run(
             () -> { elevatorPID.setReference(setpoint, ControlType.kPosition, ClosedLoopSlot.kSlot0);}
         );
