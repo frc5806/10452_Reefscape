@@ -47,7 +47,8 @@ public class RobotContainer {
     private final XboxController2 controller = new XboxController2(0);
     private final XboxController2 controller2 = new XboxController2(1);
     /* Drive Controls */
-    private final double speedMod = 1;
+    private final double speedMod = 0.25; // Set back to 1
+    // private boolean precisionMode = false;
     /* Subsystems */ 
     private final SwerveBase s_Swerve = new SwerveBase();
     // private final Intake intake = new Intake();
@@ -61,6 +62,7 @@ public class RobotContainer {
     // private SparkMax elevatorMotor1 = new SparkMax(2, MotorType.kBrushless);
     // private SparkMax elevatorMotor2 = new SparkMax(3, MotorType.kBrushless);
     private SparkMaxConfig elevatorConfig = new SparkMaxConfig();
+    private SparkMaxConfig coralConfig = new SparkMaxConfig();
 
     private final Elevator elevator = new Elevator();
 
@@ -100,9 +102,11 @@ public class RobotContainer {
 
         // Configure the button bindings
         elevatorConfig.idleMode(IdleMode.kBrake);
+        coralConfig.idleMode(IdleMode.kBrake);
 
         // elevatorMotor1.configure(elevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         // elevatorMotor2.configure(elevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        coralMotor.configure(coralConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         configureDefaultCommands();
         configureButtonBindings();
@@ -137,23 +141,26 @@ public class RobotContainer {
 
         // controller.a().onTrue(elevator.setElevatorPosition(-25));
         // controller.x().onTrue(elevator.setElevatorPosition(-2));
-        controller.povUp().onTrue(elevator.setElevatorPosition(-25));
-        controller.povLeft().onTrue(elevator.setElevatorPosition(-15));
-        controller.povDown().onTrue(elevator.setElevatorPosition(-10));
-        controller.povRight().onTrue(elevator.setElevatorPosition(-2));
+        controller.povUp().onTrue(elevator.setElevatorPosition(-9.25));
+        controller.povLeft().onTrue(elevator.setElevatorPosition(-12));
+        controller.povDown().onTrue(elevator.setElevatorPosition(-5));
+        controller.povRight().onTrue(elevator.setElevatorPosition(0));
         controller.y().onTrue(new InstantCommand(() -> System.out.println(elevator.getEncoderPos())));
+        controller.a().onTrue(elevator.setElevatorPosition(-16));
+        // controller.b().onTrue(new InstantCommand(() -> elevator.resetEncoder()));
         // controller.a().onTrue(elevator.setElevatorPosition(0));
 
-        controller2.start().onTrue(new InstantCommand(() -> elevator.hardstop()));
+        // controller2.start().onTrue(new InstantCommand(() -> elevator.hardstop()));
 
-        controller2.x().onTrue(new InstantCommand(() -> coralServo.set(1)));
-        controller2.a().onTrue(new InstantCommand(() -> coralServo.set(0.1)));
+        controller2.x().onTrue(new InstantCommand(() -> coralServo.set(0.85)));
+        controller2.a().onTrue(new InstantCommand(() -> coralServo.set(0.25)));
+        controller2.start().onTrue(new InstantCommand(() -> coralServo.set(0.15)));
         controller2.y().onTrue(new InstantCommand(() -> algaeServo.set(0.5)));
         controller2.b().onTrue(new InstantCommand(() -> algaeServo.set(0)));
     
-        controller2.leftBumper().whileTrue(new InstantCommand(() -> coralMotor.set(0.2)));
+        controller2.leftBumper().whileTrue(new InstantCommand(() -> coralMotor.set(0.4)));
         controller2.leftBumper().whileFalse(new InstantCommand(() -> coralMotor.set(0)));
-        controller2.leftTrigger().whileTrue(new InstantCommand(() -> coralMotor.set(-0.2)));
+        controller2.leftTrigger().whileTrue(new InstantCommand(() -> coralMotor.set(-0.4)));
         controller2.leftTrigger().whileFalse(new InstantCommand(() -> coralMotor.set(0)));
 
 
@@ -162,6 +169,9 @@ public class RobotContainer {
         controller2.rightTrigger().whileTrue(new InstantCommand(() -> algaeMotor.set(-0.6)));
         controller2.rightTrigger().whileFalse(new InstantCommand(() -> algaeMotor.set(0)));
 
+
+
+        // controller.a()
 
         // controller2.povDown().whileTrue(new InstantCommand(() -> {elevatorMotor1.set(0.1); elevatorMotor2.set(-0.1);}));
         // controller2.povUp().whileTrue(new InstantCommand(() -> {elevatorMotor1.set(-0.1); elevatorMotor2.set(0.1);}));

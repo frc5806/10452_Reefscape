@@ -36,6 +36,7 @@ public class Elevator extends SubsystemBase {
     private final SparkClosedLoopController elevatorPID;
 
     private boolean hardstop = true;
+    private double global_setpoint = 0;
 
     public Elevator() {
         elevatorMotor0 = new SparkMax(ElevatorConstants.kElevatorMotorPort0, MotorType.kBrushless);
@@ -79,7 +80,9 @@ public class Elevator extends SubsystemBase {
 
     public Command setElevatorPosition(double setpoint) {
         // If the elevator is set to the bottom, turn the motor off
-        if (setpoint == -2) {
+        this.global_setpoint = setpoint;
+
+        if (setpoint == 0) {
             return run(
                 () -> { elevatorMotor0.set(0); elevatorMotor1.set(0);}
             );
@@ -100,7 +103,10 @@ public class Elevator extends SubsystemBase {
     }
 
     public void resetEncoder() {
-        encoder.setPosition(0);
+        // Only allow the encoder to be reset if the global setpoint is -2
+        if (this.global_setpoint == 0) {
+            encoder.setPosition(0);
+        }
     }
 
     public void hardstop() {
