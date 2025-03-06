@@ -31,6 +31,7 @@ import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.Intake.AutoIntake;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.swerve.SwerveBase;
 import frc.lib.util.XboxController2;
 import edu.wpi.first.wpilibj.Servo;
@@ -67,6 +68,8 @@ public class RobotContainer {
     private final Elevator elevator = new Elevator();
 
     private final Vision vision = new Vision();
+
+    private final Limelight limelight = new Limelight();
 
     /* Commands */
     // private final Command AUTO_Path = new Auto(s_Swerve, shooter, intake).Path();
