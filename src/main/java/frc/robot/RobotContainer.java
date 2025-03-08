@@ -29,6 +29,7 @@ import frc.robot.auto.Auto;
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.Intake.AutoIntake;
+import frc.robot.commands.Swerve.AlignLimelight;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
@@ -148,7 +149,8 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
 //--------------------------------------- Controller 1 ----------------------------------------------------------
-        controller.b().onTrue(new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0,0, new Rotation2d()))));
+        controller.leftBumper().onTrue(new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0,0, new Rotation2d()))));
+        controller.rightBumper().whileTrue(new AlignLimelight(s_Swerve, 0, 0.3));
 
         // controller.a().onTrue(elevator.setElevatorPosition(-25));
         // controller.x().onTrue(elevator.setElevatorPosition(-2));
@@ -243,7 +245,13 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new PathPlannerAuto("Red1");
+        Command align_left = new AlignLimelight(s_Swerve, 0, 0.4);
+        Command align_right = new AlignLimelight(s_Swerve, 0, 0.4);
+        NamedCommands.registerCommand("alignLimelight_Left", align_left);
+        NamedCommands.registerCommand("alignLimelight_Right", align_right);
+
+        PathPlannerAuto autoCommand = new PathPlannerAuto("Auto_Testing");
+        return autoCommand;
         // Run path
         // try {
         //     return AutoBuilder.followPath(PathPlannerPath.fromPathFile("Straight"));

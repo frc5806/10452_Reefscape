@@ -28,6 +28,7 @@ import frc.lib.math.GeometryUtils;
 import frc.lib.util.PhotonCameraWrapper;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Limelight.LimelightData;
 import frc.robot.util.NavXGyro;
 
 import java.util.Map;
@@ -232,6 +233,44 @@ public class SwerveBase extends SubsystemBase {
                                                                 swerveMods[1].getState(),
                                                                 swerveMods[2].getState(),
                                                                 swerveMods[3].getState()), getYaw());
+    }
+
+    public double aimLimelight(){
+        LimelightData.update();
+        double[] targetpose = LimelightData.getTargetpose();
+        double x_rot = targetpose[3];
+        double y_rot = targetpose[4];
+        double z_rot = targetpose[5];
+
+        double angularVelocity = -y_rot;
+
+        return angularVelocity;
+    }
+
+    public double strafeLimelight(double offset) {
+        LimelightData.update();
+        double[] targetpose = LimelightData.getTargetpose();
+        double tx = targetpose[0];
+        double ty = targetpose[1];
+        double tz = targetpose[2];
+        // System.out.println("tx: " + tx);
+
+        double strafeSpeed = -(tx - offset);
+
+        return strafeSpeed;
+    }
+
+    public double rangeLimelight(double offset) {
+        LimelightData.update();
+        double[] targetpose = LimelightData.getTargetpose();
+        double tx = targetpose[0];
+        double ty = targetpose[1];
+        double tz = targetpose[2];
+        // System.out.println("tz: " + tz);
+
+        double translationSpeed = (tz - offset);
+
+        return translationSpeed;
     }
 
     @Override
