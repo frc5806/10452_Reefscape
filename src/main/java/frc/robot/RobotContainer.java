@@ -60,10 +60,14 @@ public class RobotContainer {
     private SparkMax coralMotor = new SparkMax(13, MotorType.kBrushless);
     private SparkMax algaeMotor = new SparkMax(12, MotorType.kBrushless);
 
+    private SparkMax climbMotor = new SparkMax(14, MotorType.kBrushless);
+
     // private SparkMax elevatorMotor1 = new SparkMax(2, MotorType.kBrushless);
     // private SparkMax elevatorMotor2 = new SparkMax(3, MotorType.kBrushless);
     private SparkMaxConfig elevatorConfig = new SparkMaxConfig();
     private SparkMaxConfig coralConfig = new SparkMaxConfig();
+
+    private SparkMaxConfig climbConfig = new SparkMaxConfig();
 
     private final Elevator elevator = new Elevator();
 
@@ -107,9 +111,13 @@ public class RobotContainer {
         elevatorConfig.idleMode(IdleMode.kBrake);
         coralConfig.idleMode(IdleMode.kBrake);
 
+        climbConfig.idleMode(IdleMode.kBrake);
+
         // elevatorMotor1.configure(elevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         // elevatorMotor2.configure(elevatorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         coralMotor.configure(coralConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        
+        climbMotor.configure(climbConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         configureDefaultCommands();
         configureButtonBindings();
@@ -149,7 +157,12 @@ public class RobotContainer {
         controller.povDown().onTrue(elevator.setElevatorPosition(-5));
         controller.povRight().onTrue(elevator.setElevatorPosition(0));
         controller.y().onTrue(new InstantCommand(() -> System.out.println(elevator.getEncoderPos())));
-        controller.a().onTrue(elevator.setElevatorPosition(-16));
+        controller.b().onTrue(elevator.setElevatorPosition(-16));
+
+        controller.a().whileTrue(new InstantCommand(() -> climbMotor.set(0.2)));
+        controller.a().whileFalse(new InstantCommand(() -> climbMotor.set(0)));
+        controller.x().whileTrue(new InstantCommand(() -> climbMotor.set(-0.2)));
+        controller.x().whileFalse(new InstantCommand(() -> climbMotor.set(0)));
         // controller.b().onTrue(new InstantCommand(() -> elevator.resetEncoder()));
         // controller.a().onTrue(elevator.setElevatorPosition(0));
 
