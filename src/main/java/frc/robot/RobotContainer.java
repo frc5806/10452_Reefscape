@@ -57,6 +57,7 @@ public class RobotContainer {
     // private final UsbCamera camera;
     // private final Servo linearActuator = new Servo(1);
     private final LinearServo coralServo = new LinearServo(1);
+    private final LinearServo algaeServo2 = new LinearServo(2);
     private final LinearServo algaeServo = new LinearServo(0);
     private SparkMax coralMotor = new SparkMax(13, MotorType.kBrushless);
     private SparkMax algaeMotor = new SparkMax(12, MotorType.kBrushless);
@@ -175,6 +176,8 @@ public class RobotContainer {
         controller2.start().onTrue(new InstantCommand(() -> coralServo.set(0.15)));
         controller2.y().onTrue(new InstantCommand(() -> algaeServo.set(0.5)));
         controller2.b().onTrue(new InstantCommand(() -> algaeServo.set(0)));
+        controller2.y().onTrue(new InstantCommand(() -> algaeServo2.set(0.5)));
+        controller2.b().onTrue(new InstantCommand(() -> algaeServo2.set(0)));
     
         controller2.leftBumper().whileTrue(new InstantCommand(() -> coralMotor.set(0.4)));
         controller2.leftBumper().whileFalse(new InstantCommand(() -> coralMotor.set(0)));
