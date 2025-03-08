@@ -49,7 +49,7 @@ public class RobotContainer {
     private final XboxController2 controller = new XboxController2(0);
     private final XboxController2 controller2 = new XboxController2(1);
     /* Drive Controls */
-    private final double speedMod = 0.25; // Set back to 1
+    private final double speedMod = 0.55; // Set back to 1
     // private boolean precisionMode = false;
     /* Subsystems */ 
     private final SwerveBase s_Swerve = new SwerveBase();
@@ -155,7 +155,8 @@ public class RobotContainer {
 
         // controller.a().onTrue(elevator.setElevatorPosition(-25));
         // controller.x().onTrue(elevator.setElevatorPosition(-2));
-        controller.povUp().onTrue(elevator.setElevatorPosition(-9.25));
+    
+        controller.povUp().onTrue(elevator.setElevatorPosition(-26.5));
         controller.povLeft().onTrue(elevator.setElevatorPosition(-12));
         controller.povDown().onTrue(elevator.setElevatorPosition(-5));
         controller.povRight().onTrue(elevator.setElevatorPosition(0));
