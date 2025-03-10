@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Constants.Swerve;
+import frc.robot.Constants.LimelightValues;
 import frc.robot.subsystems.Limelight.LimelightData;
 import frc.robot.subsystems.swerve.SwerveBase;
 import frc.robot.subsystems.Limelight;
@@ -17,8 +18,8 @@ import java.util.function.DoubleSupplier;
 
 public class AlignLimelight extends Command {
     private SwerveBase Swerve;
-    private double lateral_offset = 0;
-    private double longitudinal_offset = 0;
+    private double lateral_offset = LimelightValues.lateral_offset;
+    private double longitudinal_offset = LimelightValues.longitudinal_offset;
     public boolean finished = false;
 
     public AlignLimelight(
@@ -50,6 +51,8 @@ public class AlignLimelight extends Command {
         /* Drive */
         
         //Drives the robot after getting translation values above
+
+        //We could in addition get the type of april tag and do different things depending on the type of april tag.
         Swerve.drive(
                 new Translation2d(inOutVal, strafeVal).times(Constants.Swerve.maxSpeed).times(0.3),
                 // new Translation2d(0, 0),
@@ -64,22 +67,27 @@ public class AlignLimelight extends Command {
 
     @Override
     public boolean isFinished() {
+
+        //Tests to make sure limelight is within accetable bounds of the april tag
+
         double strafeVal = Swerve.strafeLimelight(lateral_offset);
         // Could add strafe value as well (using x value rather than turning)
         double inOutVal = Swerve.rangeLimelight(longitudinal_offset);
         double rotationVal = Swerve.aimLimelight();
 
-        boolean rotation_in_bounds = Math.abs(rotationVal) < 0.5 ? true : false;
-        boolean strafe_in_bounds = Math.abs(strafeVal) < 0.04 ? true : false;
+        boolean rotation_in_bounds = Math.abs(rotationVal) < LimelightValues.maxRotationError ? true : false;
+        boolean strafe_in_bounds = Math.abs(strafeVal) < LimelightValues.maxSideToSideError ? true : false;
         System.out.println(strafeVal);
         System.out.println(inOutVal);
-        boolean in_out_in_bounds = Math.abs(inOutVal) < 0.075 ? true : false;
+        boolean in_out_in_bounds = Math.abs(inOutVal) < LimelightValues.maxInOutError ? true : false;
         System.out.println(rotation_in_bounds + " " + strafe_in_bounds + " " + in_out_in_bounds);
         return (rotation_in_bounds && strafe_in_bounds && in_out_in_bounds);
     }
  
     @Override
     public void end(boolean interrupted){
+
+        //When the command ends stop the robot moving
         Swerve.drive(
             new Translation2d(0, 0),
             0,

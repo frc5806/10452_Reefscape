@@ -174,6 +174,19 @@ public final class Constants {
         public static final double LARGEST_DISTANCE = 0.1;
     }
 
+    //Couldn't use "LimelightConstants" because that is already used
+    public static final class LimelightValues {
+
+        //How far off the center front of the robot is the limelight alligned
+        public static final double lateral_offset = 0;
+        public static final double longitudinal_offset = 0;
+
+        //What is the margin of error acceptable on the limelight (if you set it to 0 it will continue trying to make tiny modifications indefinatly)
+        public static final double maxRotationError = 0.5;
+        public static final double maxSideToSideError = 0.5;
+        public static final double maxInOutError = 0.075;
+    }
+
     public static final class AutoConstants {
         public static final double kMaxSpeedMetersPerSecond = 2;
         public static final double kMaxAccelerationMetersPerSecondSquared = 1;
