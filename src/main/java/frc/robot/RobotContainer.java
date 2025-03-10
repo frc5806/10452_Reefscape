@@ -77,6 +77,8 @@ public class RobotContainer {
 
     private final Limelight limelight = new Limelight();
 
+    private String operatorMode = "algae";
+
     /* Commands */
     // private final Command AUTO_Path = new Auto(s_Swerve, shooter, intake).Path();
     // private final Command AUTO_TwoRing = new Auto(s_Swerve, shooter, intake).TwoRingAuto();
@@ -150,34 +152,68 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
 //--------------------------------------- Controller 1 ----------------------------------------------------------
-        controller.leftBumper().onTrue(new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0,0, new Rotation2d()))));
-        controller.rightBumper().whileTrue(new AlignLimelight(s_Swerve, 0, 0.3));
+        controller.rightTrigger().whileTrue(new AlignLimelight(s_Swerve, 0, 0.3));
+        controller.leftTrigger().whileTrue(new AlignLimelight(s_Swerve, 0, 0.3));
 
         // controller.a().onTrue(elevator.setElevatorPosition(-25));
         // controller.x().onTrue(elevator.setElevatorPosition(-2));
     
         controller.povUp().onTrue(elevator.setElevatorPosition(-26.5));
-        controller.povLeft().onTrue(elevator.setElevatorPosition(-12));
-        controller.povDown().onTrue(elevator.setElevatorPosition(-5));
+        controller.povLeft().onTrue(elevator.setElevatorPosition(-14));
+        controller.povDown().onTrue(elevator.setElevatorPosition(-6));
         controller.povRight().onTrue(elevator.setElevatorPosition(0));
-        controller.y().onTrue(new InstantCommand(() -> System.out.println(elevator.getEncoderPos())));
-        controller.b().onTrue(elevator.setElevatorPosition(-16));
+        controller.rightBumper().onTrue(elevator.setElevatorPosition(-16.5));
+        controller.leftBumper().onTrue(elevator.setElevatorPosition(-9.75));
 
         controller.a().whileTrue(new InstantCommand(() -> climbMotor.set(0.2)));
         controller.a().whileFalse(new InstantCommand(() -> climbMotor.set(0)));
+        
         controller.x().whileTrue(new InstantCommand(() -> climbMotor.set(-0.2)));
         controller.x().whileFalse(new InstantCommand(() -> climbMotor.set(0)));
+
+        controller.b().onTrue(new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0,0, new Rotation2d()))));
         // controller.b().onTrue(new InstantCommand(() -> elevator.resetEncoder()));
-        // controller.a().onTrue(elevator.setElevatorPosition(0));
+
+        controller.y().onTrue(new InstantCommand(() -> System.out.println(elevator.getEncoderPos())));
+
+
+        // if (operatorMode == "coral") {
+        //     controller2.rightBumper().whileTrue(new InstantCommand(() -> coralMotor.set(-0.4)));
+        //     controller2.rightBumper().whileFalse(new InstantCommand(() -> coralMotor.set(0)));
+
+        //     controller2.leftBumper().whileTrue(new InstantCommand(() -> coralMotor.set(0.4)));
+        //     controller2.leftBumper().whileFalse(new InstantCommand(() -> coralMotor.set(0)));
+
+        //     controller2.povUp().onTrue(new InstantCommand(() -> coralServo.set(0.85)));
+        //     controller2.povLeft().onTrue(new InstantCommand(() -> coralServo.set(0.25)));
+        //     controller2.povDown().onTrue(new InstantCommand(() -> coralServo.set(0.15)));
+
+        // } else if (operatorMode == "algae") {
+        //     controller2.rightBumper().whileTrue(new InstantCommand(() -> algaeMotor.set(-0.4)));
+        //     controller2.rightBumper().whileFalse(new InstantCommand(() -> algaeMotor.set(0)));
+
+        //     controller2.leftBumper().whileTrue(new InstantCommand(() -> algaeMotor.set(0.4)));
+        //     controller2.leftBumper().whileFalse(new InstantCommand(() -> algaeMotor.set(0)));
+
+        //     controller2.povUp().onTrue(new InstantCommand(() -> algaeServo.set(0.5)));
+        //     controller2.povUp().onTrue(new InstantCommand(() -> algaeServo2.set(0.5)));
+        //     controller2.povLeft().onTrue(new InstantCommand(() -> algaeServo.set(0)));
+        //     controller2.povLeft().onTrue(new InstantCommand(() -> algaeServo2.set(0)));
+
+        // }
+        // controller2.a().onTrue(new InstantCommand(() -> operatorMode = "algae"));
+        // controller2.x().onTrue(new InstantCommand(() -> operatorMode = "coral"));
 
         // controller2.start().onTrue(new InstantCommand(() -> elevator.hardstop()));
 
+
+        // OLD OPERATOR CODE
         controller2.x().onTrue(new InstantCommand(() -> coralServo.set(0.85)));
         controller2.a().onTrue(new InstantCommand(() -> coralServo.set(0.25)));
         controller2.start().onTrue(new InstantCommand(() -> coralServo.set(0.15)));
-        controller2.y().onTrue(new InstantCommand(() -> algaeServo.set(0.5)));
+        controller2.y().onTrue(new InstantCommand(() -> algaeServo.set(0.7)));
         controller2.b().onTrue(new InstantCommand(() -> algaeServo.set(0)));
-        controller2.y().onTrue(new InstantCommand(() -> algaeServo2.set(0.5)));
+        controller2.y().onTrue(new InstantCommand(() -> algaeServo2.set(0.7)));
         controller2.b().onTrue(new InstantCommand(() -> algaeServo2.set(0)));
     
         controller2.leftBumper().whileTrue(new InstantCommand(() -> coralMotor.set(0.4)));
