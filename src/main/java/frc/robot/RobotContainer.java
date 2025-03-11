@@ -29,10 +29,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.auto.Auto;
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.Intake.AutoIntake;
 import frc.robot.commands.Swerve.AlignLimelight;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Coral;
+import frc.robot.subsystems.Algae;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.swerve.SwerveBase;
 import frc.lib.util.XboxController2;
@@ -57,28 +57,17 @@ public class RobotContainer {
     // private final Intake intake = new Intake();
     // private final UsbCamera camera;
     // private final Servo linearActuator = new Servo(1);
-    private final LinearServo coralServo = new LinearServo(1);
-    private final LinearServo algaeServo2 = new LinearServo(2);
-    private final LinearServo algaeServo = new LinearServo(0);
-    private SparkMax coralMotor = new SparkMax(13, MotorType.kBrushless);
-    private SparkMax algaeMotor = new SparkMax(12, MotorType.kBrushless);
 
     private SparkMax climbMotor = new SparkMax(14, MotorType.kBrushless);
-
-    // private SparkMax elevatorMotor1 = new SparkMax(2, MotorType.kBrushless);
-    // private SparkMax elevatorMotor2 = new SparkMax(3, MotorType.kBrushless);
-    private SparkMaxConfig elevatorConfig = new SparkMaxConfig();
-    private SparkMaxConfig coralConfig = new SparkMaxConfig();
-
     private SparkMaxConfig climbConfig = new SparkMaxConfig();
 
     private final Elevator elevator = new Elevator();
+    private final Coral coral = new Coral();
+    private final Algae algae = new Algae();
 
     private final Vision vision = new Vision();
 
     private final Limelight limelight = new Limelight();
-
-    private String operatorMode = "algae";
 
     /* Commands */
     // private final Command AUTO_Path = new Auto(s_Swerve, shooter, intake).Path();
@@ -117,18 +106,7 @@ public class RobotContainer {
 
         vision.startVision();
 
-        // Configure the button bindings
-        elevatorConfig.idleMode(IdleMode.kBrake);
-        coralConfig.idleMode(IdleMode.kBrake);
-
         climbConfig.idleMode(IdleMode.kBrake);
-
-        // elevatorMotor1.configure(elevatorConfig, ResetMode.kResetSafeParameters,
-        // PersistMode.kPersistParameters);
-        // elevatorMotor2.configure(elevatorConfig, ResetMode.kResetSafeParameters,
-        // PersistMode.kPersistParameters);
-        coralMotor.configure(coralConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
         climbMotor.configure(climbConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         configureDefaultCommands();
@@ -182,25 +160,23 @@ public class RobotContainer {
         driverController.y().onTrue(new InstantCommand(() -> System.out.println(elevator.getEncoderPos())));
 
         // -------------------- Operator Controller --------------------
-        operatorController.x().onTrue(new InstantCommand(() -> coralServo.set(0.85)));
+        operatorController.x().onTrue(coral.coralServo(0.85));
         
-        operatorController.a().onTrue(new InstantCommand(() -> coralServo.set(0.25)));
+        operatorController.a().onTrue(coral.coralServo(0.25));
         
-        operatorController.y().onTrue(new InstantCommand(() -> algaeServo.set(0.7)));
-        operatorController.y().onTrue(new InstantCommand(() -> algaeServo2.set(0.7)));
+        operatorController.y().onTrue(algae.algaeServo(0.7));
 
-        operatorController.b().onTrue(new InstantCommand(() -> algaeServo.set(0)));
-        operatorController.b().onTrue(new InstantCommand(() -> algaeServo2.set(0)));
+        operatorController.b().onTrue(algae.algaeServo(0));
 
-        operatorController.leftBumper().whileTrue(new InstantCommand(() -> coralMotor.set(0.4)));
-        operatorController.leftBumper().whileFalse(new InstantCommand(() -> coralMotor.set(0)));
-        operatorController.leftTrigger().whileTrue(new InstantCommand(() -> coralMotor.set(-0.4)));
-        operatorController.leftTrigger().whileFalse(new InstantCommand(() -> coralMotor.set(0)));
+        operatorController.leftBumper().whileTrue(coral.coralMotor((0.4)));
+        operatorController.leftBumper().whileFalse(coral.coralMotor((0)));
+        operatorController.leftTrigger().whileTrue(coral.coralMotor((-0.4)));
+        operatorController.leftTrigger().whileFalse(coral.coralMotor((0)));
 
-        operatorController.rightBumper().whileTrue(new InstantCommand(() -> algaeMotor.set(0.6)));
-        operatorController.rightBumper().whileFalse(new InstantCommand(() -> algaeMotor.set(0)));
-        operatorController.rightTrigger().whileTrue(new InstantCommand(() -> algaeMotor.set(-0.6)));
-        operatorController.rightTrigger().whileFalse(new InstantCommand(() -> algaeMotor.set(0)));
+        operatorController.rightBumper().whileTrue(algae.algaeMotor((0.6)));
+        operatorController.rightBumper().whileFalse(algae.algaeMotor((0)));
+        operatorController.rightTrigger().whileTrue(algae.algaeMotor((-1)));
+        operatorController.rightTrigger().whileFalse(algae.algaeMotor((0)));
     }
 
     /*
@@ -211,8 +187,30 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         Command align_left = new AlignLimelight(s_Swerve, 0, 0.4);
         Command align_right = new AlignLimelight(s_Swerve, 0, 0.4);
-        NamedCommands.registerCommand("alignLimelight_Left", align_left);
-        NamedCommands.registerCommand("alignLimelight_Right", align_right);
+        NamedCommands.registerCommand("alignLimelightLeft", align_left);
+        NamedCommands.registerCommand("alignLimelightRight", align_right);
+
+        // Command elevator_down = new AlignLimelight(s_Swerve, 0, 0.4);
+        // Command elevator_l2 = new AlignLimelight(s_Swerve, 0, 0.4);
+        // Command elevator_l3 = new AlignLimelight(s_Swerve, 0, 0.4);
+        // NamedCommands.registerCommand("elevatorDown", elevator_down);
+        // NamedCommands.registerCommand("elevatorReefL2", elevator_l2);
+        // NamedCommands.registerCommand("elevatorReefL3", elevator_l3);
+    
+        Command coral_up = coral.coralServo(0.85);
+        Command coral_down = coral.coralServo(0.25);
+        Command coral_intake = coral.coralMotor(0.4);
+        Command coral_shoot = coral.coralMotor(-0.4);
+        NamedCommands.registerCommand("coralServoUp", coral_up);
+        NamedCommands.registerCommand("coralServoDown", coral_down);
+        NamedCommands.registerCommand("coralIntake", coral_intake);
+        NamedCommands.registerCommand("coralShoot", coral_shoot);
+
+
+
+
+
+
 
         PathPlannerAuto autoCommand = new PathPlannerAuto("Auto_Testing");
         return autoCommand;

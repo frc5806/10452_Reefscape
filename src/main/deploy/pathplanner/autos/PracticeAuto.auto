@@ -1,0 +1,62 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Straight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "alignLimelightLeft"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "elevatorReefL2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "coralServoDown"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "coralShoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "elevatorDown"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Back"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

@@ -10,17 +10,14 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.swerve.SwerveBase;
 
 public class Auto extends Command {
     SwerveBase swerve;
-    Intake intake;
 
-    public Auto(SwerveBase swerve, Intake intake) {
+    public Auto(SwerveBase swerve) {
         this.swerve = swerve;
-        this.intake = intake;
-        addRequirements(swerve, intake);
+        addRequirements(swerve);
     }
 
 

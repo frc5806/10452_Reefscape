@@ -20,7 +20,6 @@ public class AlignLimelight extends Command {
     private SwerveBase Swerve;
     private double lateral_offset = LimelightValues.lateral_offset;
     private double longitudinal_offset = LimelightValues.longitudinal_offset;
-    public boolean finished = false;
 
     public AlignLimelight(
             SwerveBase Swerve,
