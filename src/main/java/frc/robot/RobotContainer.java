@@ -34,6 +34,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Algae;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.swerve.SwerveBase;
 import frc.lib.util.XboxController2;
 import edu.wpi.first.wpilibj.Servo;
@@ -64,6 +65,7 @@ public class RobotContainer {
     private final Elevator elevator = new Elevator();
     private final Coral coral = new Coral();
     private final Algae algae = new Algae();
+    private final Climb climb = new Climb();
 
     private final Vision vision = new Vision();
 
@@ -148,11 +150,11 @@ public class RobotContainer {
         driverController.povRight().onTrue(elevator.setElevatorPosition(0));
         driverController.povDown().onTrue(elevator.setElevatorPosition(-6));
 
-        driverController.a().whileTrue(new InstantCommand(() -> climbMotor.set(0.2)));
-        driverController.a().whileFalse(new InstantCommand(() -> climbMotor.set(0)));
+        driverController.a().whileTrue(climb.climbMotor(0.2));
+        driverController.a().whileFalse(climb.climbMotor(0));
 
-        driverController.x().whileTrue(new InstantCommand(() -> climbMotor.set(-0.2)));
-        driverController.x().whileFalse(new InstantCommand(() -> climbMotor.set(0)));
+        driverController.x().whileTrue(climb.climbMotor(-0.2));
+        driverController.x().whileFalse(climb.climbMotor(0));
 
         driverController.b().onTrue(new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d()))));
         // driverController.b().onTrue(new InstantCommand(() -> elevator.resetEncoder()));
@@ -190,12 +192,12 @@ public class RobotContainer {
         NamedCommands.registerCommand("alignLimelightLeft", align_left);
         NamedCommands.registerCommand("alignLimelightRight", align_right);
 
-        // Command elevator_down = new AlignLimelight(s_Swerve, 0, 0.4);
-        // Command elevator_l2 = new AlignLimelight(s_Swerve, 0, 0.4);
-        // Command elevator_l3 = new AlignLimelight(s_Swerve, 0, 0.4);
-        // NamedCommands.registerCommand("elevatorDown", elevator_down);
-        // NamedCommands.registerCommand("elevatorReefL2", elevator_l2);
-        // NamedCommands.registerCommand("elevatorReefL3", elevator_l3);
+        Command elevator_down = elevator.setElevatorPosition(0);
+        Command elevator_l2 = elevator.setElevatorPosition(-6);
+        Command elevator_l3 = elevator.setElevatorPosition(-14);
+        NamedCommands.registerCommand("elevatorDown", elevator_down);
+        NamedCommands.registerCommand("elevatorReefL2", elevator_l2);
+        NamedCommands.registerCommand("elevatorReefL3", elevator_l3);
     
         Command coral_up = coral.coralServo(0.85);
         Command coral_down = coral.coralServo(0.25);
