@@ -184,7 +184,7 @@ public final class Constants {
         //What is the margin of error acceptable on the limelight (if you set it to 0 it will continue trying to make tiny modifications indefinatly)
         public static final double maxRotationError = 0.5;
         public static final double maxSideToSideError = 0.5;
-        public static final double maxInOutError = 0.075;
+        public static final double maxInOutError = 0.05;
     }
 
     public static final class AutoConstants {

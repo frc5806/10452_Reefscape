@@ -33,8 +33,8 @@ import frc.robot.commands.Swerve.AlignLimelight;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Algae;
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Climb;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.swerve.SwerveBase;
 import frc.lib.util.XboxController2;
 import edu.wpi.first.wpilibj.Servo;
@@ -59,8 +59,8 @@ public class RobotContainer {
     // private final UsbCamera camera;
     // private final Servo linearActuator = new Servo(1);
 
-    private SparkMax climbMotor = new SparkMax(14, MotorType.kBrushless);
-    private SparkMaxConfig climbConfig = new SparkMaxConfig();
+    // private SparkMax climbMotor = new SparkMax(14, MotorType.kBrushless);
+    // private SparkMaxConfig climbConfig = new SparkMaxConfig();
 
     private final Elevator elevator = new Elevator();
     private final Coral coral = new Coral();
@@ -108,8 +108,8 @@ public class RobotContainer {
 
         vision.startVision();
 
-        climbConfig.idleMode(IdleMode.kBrake);
-        climbMotor.configure(climbConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        // climbConfig.idleMode(IdleMode.kBrake);
+        // climbMotor.configure(climbConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         configureDefaultCommands();
         configureButtonBindings();
@@ -140,8 +140,8 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         // -------------------- Driver Controller --------------------
-        driverController.rightTrigger().whileTrue(new AlignLimelight(s_Swerve, 0, 0.3));
-        driverController.leftTrigger().whileTrue(new AlignLimelight(s_Swerve, 0, -0.3));
+        driverController.rightTrigger().whileTrue(new AlignLimelight(s_Swerve, -0.12, 0.3));
+        driverController.leftTrigger().whileTrue(new AlignLimelight(s_Swerve, 0.2, 0.3));
 
         driverController.rightBumper().onTrue(elevator.setElevatorPosition(-16.5));
         driverController.leftBumper().onTrue(elevator.setElevatorPosition(-9.75));
@@ -150,10 +150,10 @@ public class RobotContainer {
         driverController.povRight().onTrue(elevator.setElevatorPosition(0));
         driverController.povDown().onTrue(elevator.setElevatorPosition(-6));
 
-        driverController.a().whileTrue(climb.climbMotor(0.2));
+        driverController.a().whileTrue(climb.climbMotor(0.6));
         driverController.a().whileFalse(climb.climbMotor(0));
 
-        driverController.x().whileTrue(climb.climbMotor(-0.2));
+        driverController.x().whileTrue(climb.climbMotor(-0.6));
         driverController.x().whileFalse(climb.climbMotor(0));
 
         driverController.b().onTrue(new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d()))));
@@ -162,7 +162,7 @@ public class RobotContainer {
         driverController.y().onTrue(new InstantCommand(() -> System.out.println(elevator.getEncoderPos())));
 
         // -------------------- Operator Controller --------------------
-        operatorController.x().onTrue(coral.coralServo(0.85));
+        operatorController.x().onTrue(coral.coralServo(0.8));
         
         operatorController.a().onTrue(coral.coralServo(0.25));
         
@@ -187,19 +187,19 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        Command align_left = new AlignLimelight(s_Swerve, 0, 0.4);
-        Command align_right = new AlignLimelight(s_Swerve, 0, 0.4);
+        Command align_left = new AlignLimelight(s_Swerve, 0.2, 0.3);
+        Command align_right = new AlignLimelight(s_Swerve, -0.12, 0.3);
         NamedCommands.registerCommand("alignLimelightLeft", align_left);
         NamedCommands.registerCommand("alignLimelightRight", align_right);
 
-        Command elevator_down = elevator.setElevatorPosition(0);
-        Command elevator_l2 = elevator.setElevatorPosition(-6);
-        Command elevator_l3 = elevator.setElevatorPosition(-14);
-        NamedCommands.registerCommand("elevatorDown", elevator_down);
-        NamedCommands.registerCommand("elevatorReefL2", elevator_l2);
-        NamedCommands.registerCommand("elevatorReefL3", elevator_l3);
+        // Command elevator_down = new AlignLimelight(s_Swerve, 0, 0.4);    
+        // Command elevator_l2 = new AlignLimelight(s_Swerve, 0, 0.4);
+        // Command elevator_l3 = new AlignLimelight(s_Swerve, 0, 0.4);
+        // NamedCommands.registerCommand("elevatorDown", elevator_down);
+        // NamedCommands.registerCommand("elevatorReefL2", elevator_l2);
+        // NamedCommands.registerCommand("elevatorReefL3", elevator_l3);
     
-        Command coral_up = coral.coralServo(0.85);
+        Command coral_up = coral.coralServo(0.8);
         Command coral_down = coral.coralServo(0.25);
         Command coral_intake = coral.coralMotor(0.4);
         Command coral_shoot = coral.coralMotor(-0.4);
@@ -214,7 +214,7 @@ public class RobotContainer {
 
 
 
-        PathPlannerAuto autoCommand = new PathPlannerAuto("Auto_Testing");
+        PathPlannerAuto autoCommand = new PathPlannerAuto("PracticeAuto");
         return autoCommand;
         // Run path
         // try {

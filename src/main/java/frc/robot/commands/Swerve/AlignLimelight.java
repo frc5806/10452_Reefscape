@@ -36,16 +36,14 @@ public class AlignLimelight extends Command {
         /* Get Values, Deadband*/
         double strafeVal = Swerve.strafeLimelight(lateral_offset) * 2;
         // Could add strafe value as well (using x value rather than turning)
-        double inOutVal = Swerve.rangeLimelight(longitudinal_offset) * 2;
-        // double rotationVal = Swerve.aimLimelight() * 0.02;
-        double rotationVal = 0.04 * Swerve.aimLimelight() * Math.abs(1 / (10*Math.pow(strafeVal, 2) + 1));
+        double inOutVal = Swerve.rangeLimelight(longitudinal_offset) * 1.5;
+        double rotationVal = 0.03 * Swerve.aimLimelight() * Math.abs(1 / (10*Math.pow(strafeVal, 2) + 1));
+        // double rotationVal = 0.03 * Swerve.aimLimelight();
 
         //Updates numbers to smart dashbaord
         SmartDashboard.putNumber("Limelight inOutVal", inOutVal);
         SmartDashboard.putNumber("strafeVal", strafeVal);
         SmartDashboard.putNumber("Limelight rotationVal", rotationVal);
-
-
 
         /* Drive */
         
