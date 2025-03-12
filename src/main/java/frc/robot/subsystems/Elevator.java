@@ -83,15 +83,40 @@ public class Elevator extends SubsystemBase {
         this.global_setpoint = setpoint;
 
         if (setpoint == 0) {
-            return run(
-                () -> { elevatorMotor0.set(0); elevatorMotor1.set(0);}
-            );
+
+            return new Command() {
+                private boolean isfinished = false;
+                public void initialize(){
+                    elevatorMotor0.set(0); elevatorMotor1.set(0);
+                    isfinished = true;
+                }
+                public boolean isFinished(){
+                    return isfinished;
+                }
+            };
+            // return run(
+            //     () -> { elevatorMotor0.set(0); elevatorMotor1.set(0);}
+            // );
         }
+        
+        return new Command(){
+            private boolean isfinished = false;
+                public void execute(){
+                    elevatorPID.setReference(setpoint, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+                    
+                }
+                public boolean isFinished(){
+                    return isfinished;
+                }
+        };
+
+        // return run(
+        //     () -> { elevatorPID.setReference(setpoint, ControlType.kPosition, ClosedLoopSlot.kSlot0);}
+        // );
+
     
-        return run(
-            () -> { elevatorPID.setReference(setpoint, ControlType.kPosition, ClosedLoopSlot.kSlot0);}
-        );
     }
+
 
 
     public double getEncoderPos(){
