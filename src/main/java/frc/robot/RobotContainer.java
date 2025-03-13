@@ -56,12 +56,8 @@ public class RobotContainer {
     // private boolean precisionMode = false;
     /* Subsystems */
     private final SwerveBase s_Swerve = new SwerveBase();
-    // private final Intake intake = new Intake();
     // private final UsbCamera camera;
     // private final Servo linearActuator = new Servo(1);
-
-    // private SparkMax climbMotor = new SparkMax(14, MotorType.kBrushless);
-    // private SparkMaxConfig climbConfig = new SparkMaxConfig();
 
     private final Elevator elevator = new Elevator();
     private final Coral coral = new Coral();
@@ -110,9 +106,6 @@ public class RobotContainer {
         // camera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
 
         vision.startVision();
-
-        // climbConfig.idleMode(IdleMode.kBrake);
-        // climbMotor.configure(climbConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         configureDefaultCommands();
         configureButtonBindings();
@@ -195,12 +188,12 @@ public class RobotContainer {
         NamedCommands.registerCommand("alignLimelightLeft", align_left);
         NamedCommands.registerCommand("alignLimelightRight", align_right);
 
-        // Command elevator_down = new AlignLimelight(s_Swerve, 0, 0.4);    
-        // Command elevator_l2 = new AlignLimelight(s_Swerve, 0, 0.4);
-        // Command elevator_l3 = new AlignLimelight(s_Swerve, 0, 0.4);
-        // NamedCommands.registerCommand("elevatorDown", elevator_down);
-        // NamedCommands.registerCommand("elevatorReefL2", elevator_l2);
-        // NamedCommands.registerCommand("elevatorReefL3", elevator_l3);
+        Command elevator_down = elevator.setElevatorPosition(0);
+        Command elevator_l2 = elevator.setElevatorPosition(-6);
+        Command elevator_l3 = elevator.setElevatorPosition(-14);
+        NamedCommands.registerCommand("elevatorDown", elevator_down);
+        NamedCommands.registerCommand("elevatorReefL2", elevator_l2);
+        NamedCommands.registerCommand("elevatorReefL3", elevator_l3);
     
         Command coral_up = coral.coralServo(0.8);
         Command coral_down = coral.coralServo(0.25);
