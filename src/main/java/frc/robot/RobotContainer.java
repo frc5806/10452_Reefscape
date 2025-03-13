@@ -188,37 +188,25 @@ public class RobotContainer {
         NamedCommands.registerCommand("alignLimelightLeft", align_left);
         NamedCommands.registerCommand("alignLimelightRight", align_right);
 
-        Command elevator_down = elevator.setElevatorPosition(0);
-        Command elevator_l2 = elevator.setElevatorPosition(-6);
-        Command elevator_l3 = elevator.setElevatorPosition(-14);
+        Command elevator_down = elevator.setElevatorPositionAutonomous(0);
+        Command elevator_l2_coral = elevator.setElevatorPositionAutonomous(-6);
+        Command elevator_l3_coral = elevator.setElevatorPositionAutonomous(-14);
+        Command elevator_bottom_algae = elevator.setElevatorPositionAutonomous(-9.75);
+        Command elevator_top_algae = elevator.setElevatorPositionAutonomous(-16.5);
         NamedCommands.registerCommand("elevatorDown", elevator_down);
-        NamedCommands.registerCommand("elevatorReefL2", elevator_l2);
-        NamedCommands.registerCommand("elevatorReefL3", elevator_l3);
+        NamedCommands.registerCommand("elevatorReefL2", elevator_l2_coral);
+        NamedCommands.registerCommand("elevatorReefL3", elevator_l3_coral);
+        NamedCommands.registerCommand("elevatorAlgaeBottom", elevator_bottom_algae);
+        NamedCommands.registerCommand("elevatorAlgaeTop", elevator_top_algae);
     
         Command coral_up = coral.coralServo(0.8);
         Command coral_down = coral.coralServo(0.25);
-        Command coral_intake = coral.coralMotor(0.4);
-        Command coral_shoot = coral.coralMotor(-0.4);
+        Command coral_intake = coral.coralMotorAutonomous(0.4);
+        Command coral_shoot = coral.coralMotorAutonomous(-0.4);
         NamedCommands.registerCommand("coralServoUp", coral_up);
         NamedCommands.registerCommand("coralServoDown", coral_down);
         NamedCommands.registerCommand("coralIntake", coral_intake);
         NamedCommands.registerCommand("coralShoot", coral_shoot);
-
-
-        //Can you double check these are correct?
-        Command elevatorL3Coral = elevator.setElevatorPositionAutonomous(-14);
-        Command elevatorL2Coral = elevator.setElevatorPositionAutonomous(-6);
-        Command elevatorL3Algae = elevator.setElevatorPositionAutonomous(-16.5);
-        Command elevatorL2Algae = elevator.setElevatorPositionAutonomous(-9.75);
-        Command elevatorBottom = elevator.setElevatorPositionAutonomous(0);
-
-        NamedCommands.registerCommand("elevatorL3Coral", elevatorL3Coral);
-        NamedCommands.registerCommand("elevatorL2Coral", elevatorL2Coral);
-        NamedCommands.registerCommand("elevatorL3Algae", elevatorL3Algae);
-        NamedCommands.registerCommand("elevatorL2Algae", elevatorL2Algae);
-        NamedCommands.registerCommand("elevatorBottom", elevatorBottom);
-
-
 
         PathPlannerAuto autoCommand = new PathPlannerAuto("PracticeAuto");
         return autoCommand;

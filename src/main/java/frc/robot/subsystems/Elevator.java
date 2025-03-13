@@ -123,9 +123,10 @@ public class Elevator extends SubsystemBase {
             public void initialize() {
                 setElevatorPosition(setpoint).schedule();
             }
-
+ 
             public boolean isFinished() {
-                return getEncoderPos() - setpoint < 0.1;
+                double threshold = (-2/10) * (setpoint+6) + 3.5;
+                return Math.abs(getEncoderPos() - setpoint) < threshold;
             }
 
             public void end(boolean interrupted) {

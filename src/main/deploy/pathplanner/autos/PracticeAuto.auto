@@ -13,26 +13,13 @@
         {
           "type": "named",
           "data": {
-            "name": "alignLimelightLeft"
+            "name": "elevatorReefL2"
           }
         },
         {
-          "type": "parallel",
+          "type": "wait",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "elevatorReefL2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "coralServoDown"
-                }
-              }
-            ]
+            "waitTime": 2.0
           }
         },
         {
@@ -42,9 +29,21 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "elevatorDown"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
