@@ -13,13 +13,31 @@
         {
           "type": "named",
           "data": {
+            "name": "alignLimelightRight"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "coralServoDown"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "elevatorReefL2"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 1.0
           }
         },
         {
@@ -38,6 +56,12 @@
           "type": "named",
           "data": {
             "name": "elevatorDown"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "coralServoUp"
           }
         },
         {

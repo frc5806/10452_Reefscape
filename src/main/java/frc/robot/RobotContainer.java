@@ -142,7 +142,7 @@ public class RobotContainer {
         driverController.rightBumper().onTrue(elevator.setElevatorPosition(-16.5));
         driverController.leftBumper().onTrue(elevator.setElevatorPosition(-9.75));
         
-        driverController.povLeft().onTrue(elevator.setElevatorPosition(-14));
+        driverController.povLeft().onTrue(elevator.setElevatorPosition(-13));
         driverController.povRight().onTrue(elevator.setElevatorPosition(0));
         driverController.povDown().onTrue(elevator.setElevatorPosition(-6));
 
@@ -158,7 +158,7 @@ public class RobotContainer {
         driverController.y().onTrue(new InstantCommand(() -> System.out.println(elevator.getEncoderPos())));
 
         // -------------------- Operator Controller --------------------
-        operatorController.x().onTrue(coral.coralServo(0.8));
+        operatorController.x().onTrue(coral.coralServo(0.82));
         
         operatorController.a().onTrue(coral.coralServo(0.25));
         
@@ -166,15 +166,17 @@ public class RobotContainer {
 
         operatorController.b().onTrue(algae.algaeServo(0));
 
-        operatorController.leftBumper().whileTrue(coral.coralMotor((0.4)));
-        operatorController.leftBumper().whileFalse(coral.coralMotor((0)));
-        operatorController.leftTrigger().whileTrue(coral.coralMotor((-0.4)));
-        operatorController.leftTrigger().whileFalse(coral.coralMotor((0)));
+        operatorController.start().onTrue(algae.algaeServo(0.2));
 
-        operatorController.rightBumper().whileTrue(algae.algaeMotor((0.6)));
-        operatorController.rightBumper().whileFalse(algae.algaeMotor((0)));
-        operatorController.rightTrigger().whileTrue(algae.algaeMotor((-1)));
-        operatorController.rightTrigger().whileFalse(algae.algaeMotor((0)));
+        operatorController.leftBumper().whileTrue(coral.coralMotor(0.4));
+        operatorController.leftBumper().whileFalse(coral.coralMotor(0));
+        operatorController.leftTrigger().whileTrue(coral.coralMotor(-0.4));
+        operatorController.leftTrigger().whileFalse(coral.coralMotor(0));
+
+        operatorController.rightTrigger().whileTrue(algae.algaeMotor(0.8));
+        operatorController.rightTrigger().whileFalse(algae.algaeMotor(0));
+        operatorController.rightBumper().whileTrue(algae.algaeMotor(-0.6));
+        operatorController.rightBumper().whileFalse(algae.algaeMotor(0));
     }
 
     /*
@@ -190,7 +192,7 @@ public class RobotContainer {
 
         Command elevator_down = elevator.setElevatorPositionAutonomous(0);
         Command elevator_l2_coral = elevator.setElevatorPositionAutonomous(-6);
-        Command elevator_l3_coral = elevator.setElevatorPositionAutonomous(-14);
+        Command elevator_l3_coral = elevator.setElevatorPositionAutonomous(-13);
         Command elevator_bottom_algae = elevator.setElevatorPositionAutonomous(-9.75);
         Command elevator_top_algae = elevator.setElevatorPositionAutonomous(-16.5);
         NamedCommands.registerCommand("elevatorDown", elevator_down);
@@ -199,8 +201,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("elevatorAlgaeBottom", elevator_bottom_algae);
         NamedCommands.registerCommand("elevatorAlgaeTop", elevator_top_algae);
     
-        Command coral_up = coral.coralServo(0.8);
-        Command coral_down = coral.coralServo(0.25);
+        Command coral_up = coral.coralServoAutonomous(0.8);
+        Command coral_down = coral.coralServoAutonomous(0.25);
         Command coral_intake = coral.coralMotorAutonomous(0.4);
         Command coral_shoot = coral.coralMotorAutonomous(-0.4);
         NamedCommands.registerCommand("coralServoUp", coral_up);

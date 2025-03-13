@@ -39,6 +39,26 @@ public class Coral extends SubsystemBase {
         );
     }
 
+    public Command coralServoAutonomous(double position) {
+        Command autoCommand = new Command() {
+            public void initialize() {
+                coralServo.set(position);
+            }
+ 
+            public boolean isFinished() {
+                if (Math.abs(coralServo.get() - position) < 0.1) {
+                    return true;
+                }
+                return false;
+            }
+
+            public void end(boolean interrupted) {
+            }
+        };
+
+        return autoCommand;
+    }
+
     public Command coralMotor(double speed) {
         return run(
             () -> { 

@@ -1,6 +1,6 @@
 # The Code for 10452's REEFSCAPE Game
 
-## Done about 1% by Sebastian Baxter, 3% by Ethan Rosenfled, 6% by Sophie Willer-Buchardi, and 90% by people we don't know
+## Done about 1% by Sebastian Baxter, 3% by Ethan Rosenfeld, 6% by Sophie Willer-Buchardi, and 90% by people we don't know
 
 In person Tasks:
 - Make sure limelight works
