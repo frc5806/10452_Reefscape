@@ -27,8 +27,8 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Elevator extends SubsystemBase {
-    
-    private final SparkMax elevatorMotor1; 
+
+    private final SparkMax elevatorMotor1;
     private final SparkMax elevatorMotor0;
     private final RelativeEncoder encoder;
     private final SparkMaxConfig config0;
@@ -50,14 +50,15 @@ public class Elevator extends SubsystemBase {
         resetEncoder();
 
         elevatorPID = elevatorMotor0.getClosedLoopController();
-        
+
     }
 
     public void configElevator() {
         config0.closedLoop.p(Constants.ElevatorConstants.elevatorKP, ClosedLoopSlot.kSlot0);
         config0.closedLoop.i(Constants.ElevatorConstants.elevatorKI, ClosedLoopSlot.kSlot0);
         config0.closedLoop.d(Constants.ElevatorConstants.elevatorKD, ClosedLoopSlot.kSlot0);
-        config0.closedLoop.outputRange(-Constants.ElevatorConstants.elevatorPower, Constants.ElevatorConstants.elevatorPower);
+        config0.closedLoop.outputRange(-Constants.ElevatorConstants.elevatorPower,
+                Constants.ElevatorConstants.elevatorPower);
         config0.smartCurrentLimit(Constants.ElevatorConstants.elevatorContinuousCurrentLimit);
         config0.inverted(Constants.ElevatorConstants.elevatorInverted);
         config0.idleMode(Constants.ElevatorConstants.elevatorIdleMode);
@@ -66,9 +67,7 @@ public class Elevator extends SubsystemBase {
 
         config1.follow(Constants.ElevatorConstants.kElevatorMotorPort0, false);
         elevatorMotor1.configure(config1, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
- }
-
- 
+    }
 
     public void set(double pwr) {
         elevatorMotor0.set(pwr);
@@ -76,7 +75,7 @@ public class Elevator extends SubsystemBase {
 
     public void setPosition(double pos) {
         elevatorPID.setReference(pos, ControlType.kPosition, ClosedLoopSlot.kSlot0);
-    } 
+    }
 
     public Command setElevatorPosition(double setpoint) {
         // If the elevator is set to the bottom, turn the motor off
@@ -85,45 +84,67 @@ public class Elevator extends SubsystemBase {
         if (setpoint == 0) {
 
             // return new Command() {
-            //     private boolean isfinished = false;
-            //     public void initialize(){
-            //         elevatorMotor0.set(0); elevatorMotor1.set(0);
-            //         isfinished = true;
-            //     }
-            //     public boolean isFinished(){
-            //         return isfinished;
-            //     }
+            // private boolean isfinished = false;
+            // public void initialize(){
+            // elevatorMotor0.set(0); elevatorMotor1.set(0);
+            // isfinished = true;
+            // }
+            // public boolean isFinished(){
+            // return isfinished;
+            // }
             // };
             return run(
-                () -> { elevatorMotor0.set(0); elevatorMotor1.set(0);}
-            );
+                    () -> {
+                        elevatorMotor0.set(0);
+                        elevatorMotor1.set(0);
+                    });
         }
-        
+
         // return new Command(){
-        //         public void execute(){
-        //             elevatorPID.setReference(setpoint, ControlType.kPosition, ClosedLoopSlot.kSlot0);
-                    
-        //         }
-        //         public boolean isFinished(){
-        //             return getEncoderPos() == setpoint;
-        //         }
+        // public void execute(){
+        // elevatorPID.setReference(setpoint, ControlType.kPosition,
+        // ClosedLoopSlot.kSlot0);
+
+        // }
+        // public boolean isFinished(){
+        // return getEncoderPos() == setpoint;
+        // }
         // };
 
         return run(
-            () -> { elevatorPID.setReference(setpoint, ControlType.kPosition, ClosedLoopSlot.kSlot0);}
-        );
+                () -> {
+                    elevatorPID.setReference(setpoint, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+                });
 
-    
     }
 
+    public Command setElevatorPositionAutonomous(double setpoint) {
+        Command autoCommand = new Command() {
+            public void initialize() {
+                setElevatorPosition(setpoint).schedule();
+            }
 
+            public boolean isFinished() {
+                return getEncoderPos() - setpoint < 0.1;
+            }
 
-    public double getEncoderPos(){
+            public void end(boolean interrupted) {
+                // I don't think we need to do anything here
+            }
+        };
+
+        return autoCommand;
+
+    }
+
+    public double getEncoderPos() {
         return encoder.getPosition();
     }
 
     public DoubleSupplier getEncoderPosSupplier() {
-        return () -> {return encoder.getPosition();};
+        return () -> {
+            return encoder.getPosition();
+        };
     }
 
     public void resetEncoder() {
@@ -151,5 +172,5 @@ public class Elevator extends SubsystemBase {
     public void simulationPeriodic() {
         // This method will be called once per scheduler run during simulation
     }
-    
+
 }

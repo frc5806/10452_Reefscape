@@ -31,13 +31,24 @@ public class Coral extends SubsystemBase {
 
     public Command coralServo(double position) {
         return run(
-            () -> { coralServo.set(position); }
+            () -> { 
+                
+                    coralServo.set(position);
+                
+            }
         );
     }
 
     public Command coralMotor(double speed) {
         return run(
-            () -> { coralMotor.set(speed); }
+            () -> { 
+
+                //We should output this value to see what is going on
+                if(coralMotor.getEncoder().getVelocity() < 1){
+                    coralMotor.set(speed);
+                }
+
+            }
         );
     }
 }

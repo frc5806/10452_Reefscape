@@ -43,6 +43,7 @@ import frc.robot.subsystems.Vision;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 
+
 public class RobotContainer {
     /* Shuffleboard */
     public static ShuffleboardTab autoTab = Shuffleboard.getTab("Auto");
@@ -70,6 +71,8 @@ public class RobotContainer {
     private final Vision vision = new Vision();
 
     private final Limelight limelight = new Limelight();
+
+
 
     /* Commands */
     // private final Command AUTO_Path = new Auto(s_Swerve, shooter, intake).Path();
@@ -209,8 +212,18 @@ public class RobotContainer {
         NamedCommands.registerCommand("coralShoot", coral_shoot);
 
 
+        //Can you double check these are correct?
+        Command elevatorL3Coral = elevator.setElevatorPositionAutonomous(-14);
+        Command elevatorL2Coral = elevator.setElevatorPositionAutonomous(-6);
+        Command elevatorL3Algae = elevator.setElevatorPositionAutonomous(-16.5);
+        Command elevatorL2Algae = elevator.setElevatorPositionAutonomous(-9.75);
+        Command elevatorBottom = elevator.setElevatorPositionAutonomous(0);
 
-
+        NamedCommands.registerCommand("elevatorL3Coral", elevatorL3Coral);
+        NamedCommands.registerCommand("elevatorL2Coral", elevatorL2Coral);
+        NamedCommands.registerCommand("elevatorL3Algae", elevatorL3Algae);
+        NamedCommands.registerCommand("elevatorL2Algae", elevatorL2Algae);
+        NamedCommands.registerCommand("elevatorBottom", elevatorBottom);
 
 
 
