@@ -42,6 +42,8 @@ import frc.robot.subsystems.LinearServo;
 import frc.robot.subsystems.Vision;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.ctre.phoenix.led.CANdle;
+import com.ctre.phoenix.led.RainbowAnimation;
 
 
 public class RobotContainer {
@@ -67,6 +69,8 @@ public class RobotContainer {
     private final Vision vision = new Vision();
 
     private final Limelight limelight = new Limelight();
+
+    private final CANdle led;
 
 
 
@@ -104,6 +108,11 @@ public class RobotContainer {
 
         // camera = CameraServer.startAutomaticCapture(0);
         // camera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+
+        led = new CANdle(4);
+        // Basic rainbow animation
+        RainbowAnimation anim = new RainbowAnimation();
+        led.animate(anim);
 
         vision.startVision();
 
