@@ -200,7 +200,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("elevatorReefL3", elevator_l3_coral);
         NamedCommands.registerCommand("elevatorAlgaeBottom", elevator_bottom_algae);
         NamedCommands.registerCommand("elevatorAlgaeTop", elevator_top_algae);
-    
+
         Command coral_up = coral.coralServoAutonomous(0.8);
         Command coral_down = coral.coralServoAutonomous(0.25);
         Command coral_intake = coral.coralMotorAutonomous(0.4);

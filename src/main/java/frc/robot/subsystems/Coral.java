@@ -63,21 +63,26 @@ public class Coral extends SubsystemBase {
         return run(
             () -> { 
                 coralMotor.set(speed);
-                // System.out.println(coralMotor.getEncoder().getVelocity());
+                System.out.println(coralMotor.getEncoder().getVelocity());
             }
         );
     }
 
     public Command coralMotorAutonomous(double speed) {
         Command autoCommand = new Command() {
+            private boolean reached_speed = false;
             public void execute() {
                 coralMotor.set(speed);
             }
  
             public boolean isFinished() {
+                if (coralMotor.getEncoder().getVelocity() > 2000 && speed > 0) {
+                    reached_speed = true;
+                }
+    
                 if (coralMotor.getEncoder().getVelocity() < -2000 && speed < 0) {
                     return true;
-                } if (coralMotor.getEncoder().getVelocity() > 2000 && speed > 0) {
+                } else if (coralMotor.getEncoder().getVelocity() < 2000 && reached_speed && speed > 0) {
                     return true;
                 }
                 return false;

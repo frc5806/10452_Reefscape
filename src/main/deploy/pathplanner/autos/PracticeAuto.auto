@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "coralIntake"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Straight"
