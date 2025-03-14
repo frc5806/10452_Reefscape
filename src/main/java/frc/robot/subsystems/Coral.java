@@ -63,7 +63,7 @@ public class Coral extends SubsystemBase {
         return run(
             () -> { 
                 coralMotor.set(speed);
-                System.out.println(coralMotor.getEncoder().getVelocity());
+                // System.out.println(coralMotor.getEncoder().getVelocity());
             }
         );
     }
@@ -82,7 +82,7 @@ public class Coral extends SubsystemBase {
     
                 if (coralMotor.getEncoder().getVelocity() < -2000 && speed < 0) {
                     return true;
-                } else if (coralMotor.getEncoder().getVelocity() < 2000 && reached_speed && speed > 0) {
+                } else if (coralMotor.getEncoder().getVelocity() < 1000 && reached_speed && speed > 0) {
                     return true;
                 }
                 return false;

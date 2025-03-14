@@ -7,6 +7,18 @@
         {
           "type": "named",
           "data": {
+            "name": "coralServoUp"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "coralIntake"
           }
         },
@@ -19,13 +31,7 @@
         {
           "type": "named",
           "data": {
-            "name": "alignLimelightRight"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "name": "elevatorReefL2"
           }
         },
         {
@@ -35,27 +41,15 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "elevatorReefL2"
-          }
-        },
-        {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 2.0
           }
         },
         {
           "type": "named",
           "data": {
             "name": "coralShoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
           }
         },
         {
