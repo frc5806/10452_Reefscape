@@ -9,6 +9,10 @@ In person Tasks:
 - Test the new elevator autonomous methods in pathplanner
 
 Spring Break Tasks:
-- Build 3 rigorous autonomous paths
+- Build rigorous autonomous paths
 - Build LED Controllers
-    - Will have to use Phoenix 5 because CANdles are not yet supported by Phenix 6 (this has been done by other teams). Should be fairly straightforward otherwise.
+    - Should we change LEDs based on if the limelight recognizes an april tag or not?
+    - Auto stuff - should we align and go to height at the same time?
+
+Notes:
+- if you put in smartdashboard what alliance then it will reset your odomotry for you

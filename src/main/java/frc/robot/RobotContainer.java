@@ -66,10 +66,13 @@ public class RobotContainer {
     private final Algae algae = new Algae();
     private final Climb climb = new Climb();
 
+    //Instantiate our camera (not limelight - this is for visuals) 
     private final Vision vision = new Vision();
 
+    //Instantiate limelight handling class
     private final Limelight limelight = new Limelight();
 
+    //Crate a CANdle for visual controls of the robot
     private final CANdle led;
 
 
@@ -109,18 +112,27 @@ public class RobotContainer {
         // camera = CameraServer.startAutomaticCapture(0);
         // camera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
 
+        //Identiy where the CANdle is
         led = new CANdle(4);
         // Basic rainbow animation
         RainbowAnimation anim = new RainbowAnimation();
         led.animate(anim);
 
+        //Start the visual (not limelight) camera
         vision.startVision();
 
+        //Configure our bindings
         configureDefaultCommands();
         configureButtonBindings();
     }
 
     public void configureDefaultCommands() {
+
+        if(limelight.isValidTargets()){
+            
+        }
+
+        //Configure bindings for serve
         s_Swerve.setDefaultCommand(
                 new TeleopSwerve(
                         s_Swerve,
@@ -144,10 +156,15 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
+
+        
+
+
         // -------------------- Driver Controller --------------------
         driverController.rightTrigger().whileTrue(new AlignLimelight(s_Swerve, -0.12, 0.3));
         driverController.leftTrigger().whileTrue(new AlignLimelight(s_Swerve, 0.2, 0.3));
 
+        //Run elevator with POV and bumpers
         driverController.rightBumper().onTrue(elevator.setElevatorPosition(-16.5));
         driverController.leftBumper().onTrue(elevator.setElevatorPosition(-9.75));
         
@@ -155,11 +172,12 @@ public class RobotContainer {
         driverController.povRight().onTrue(elevator.setElevatorPosition(0));
         driverController.povDown().onTrue(elevator.setElevatorPosition(-6));
 
+        //Run climb
         driverController.a().whileTrue(climb.climbMotor(0.6));
-        driverController.a().whileFalse(climb.climbMotor(0));
+        driverController.a().onFalse(climb.climbMotor(0));
 
         driverController.x().whileTrue(climb.climbMotor(-0.6));
-        driverController.x().whileFalse(climb.climbMotor(0));
+        driverController.x().onFalse(climb.climbMotor(0));
 
         driverController.b().onTrue(new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d()))));
         // driverController.b().onTrue(new InstantCommand(() -> elevator.resetEncoder()));
@@ -167,6 +185,8 @@ public class RobotContainer {
         driverController.y().onTrue(new InstantCommand(() -> System.out.println(elevator.getEncoderPos())));
 
         // -------------------- Operator Controller --------------------
+
+        //Run each servo with a, x, y, b, and start for a algae ground intake
         operatorController.x().onTrue(coral.coralServo(0.82));
         
         operatorController.a().onTrue(coral.coralServo(0.25));
@@ -177,6 +197,7 @@ public class RobotContainer {
 
         operatorController.start().onTrue(algae.algaeServo(0.2));
 
+        //Run motors with bumpers and triggers
         operatorController.leftBumper().whileTrue(coral.coralMotor(0.4));
         operatorController.leftBumper().whileFalse(coral.coralMotor(0));
         operatorController.leftTrigger().whileTrue(coral.coralMotor(-0.4));
@@ -194,6 +215,8 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
+
+        //A number of named commands that can be referenced within path planner to create autonous routines
         Command align_left = new AlignLimelight(s_Swerve, 0.2, 0.3);
         Command align_right = new AlignLimelight(s_Swerve, -0.12, 0.3);
         NamedCommands.registerCommand("alignLimelightLeft", align_left);
@@ -219,8 +242,11 @@ public class RobotContainer {
         NamedCommands.registerCommand("coralIntake", coral_intake);
         NamedCommands.registerCommand("coralShoot", coral_shoot);
 
+        //Register a specific autonomous routine from path planner (that uses the above named commands) as our autonomous
         PathPlannerAuto autoCommand = new PathPlannerAuto("PracticeAuto");
         return autoCommand;
+
+        
         // Run path
         // try {
         // return AutoBuilder.followPath(PathPlannerPath.fromPathFile("Straight"));

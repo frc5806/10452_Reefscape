@@ -51,13 +51,17 @@ public class SwerveBase extends SubsystemBase {
     private final Field2d field = new Field2d();
     private boolean hasInitialized = false;
 
+
+    //TODO what is this doing?
     private GenericEntry aprilTagTarget = RobotContainer.autoTab
             .add("Currently Seeing April Tag", false).withWidget(BuiltInWidgets.kBooleanBox)
             .withProperties(Map.of("Color when true", "green", "Color when false", "red"))
             .withPosition(8, 4).withSize(2, 2).getEntry();
 
+    
     public SwerveBase() {
 
+        //Establishes 4 different Swerve modules
         swerveMods = new RevSwerveModule[] {
 
             new RevSwerveModule(0, Constants.Swerve.Modules.Mod0.constants),
@@ -69,6 +73,7 @@ public class SwerveBase extends SubsystemBase {
         swerveOdometer = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), getModulePositions(), new Pose2d());
         resetOdometry(new Pose2d());
         
+        //um?
         try{
             config = RobotConfig.fromGUISettings();
         } catch (Exception e) {
@@ -103,6 +108,7 @@ public class SwerveBase extends SubsystemBase {
 
     }
 
+    //I don't think this is implemented anywhere
     public void wheelsIn() {
         swerveMods[0].setDesiredState(new SwerveModuleState(2, Rotation2d.fromDegrees(45)), false);
         swerveMods[1].setDesiredState(new SwerveModuleState(2, Rotation2d.fromDegrees(135)), false);
@@ -112,13 +118,21 @@ public class SwerveBase extends SubsystemBase {
     }
 
     private static ChassisSpeeds correctForDynamics(ChassisSpeeds originalSpeeds) {
+        //This method I believe takes in the initial changes that the drive command takes in, then adjusts them with th Twist2D.
+
+        //I think the values are mulitplied and divided by LOOP_TIME_S because Twist2D needs to take into account the "time interval" of each movemenet of the movement, though are divded because chasisspeeds does not need that - I think
+
         final double LOOP_TIME_S = 0.02;
         Pose2d futureRobotPose =
             new Pose2d(
                 originalSpeeds.vxMetersPerSecond * LOOP_TIME_S,
                 originalSpeeds.vyMetersPerSecond * LOOP_TIME_S,
                 Rotation2d.fromRadians(originalSpeeds.omegaRadiansPerSecond * LOOP_TIME_S));
+
+        //Twist2D is the difference between two positions - between two different pose2Ds (curves)
         Twist2d twistForPose = GeometryUtils.log(futureRobotPose);
+
+        //Creates new speeds based on the Twist2D just created. dx, dy, and dtheta are created by the Twist2D.
         ChassisSpeeds updatedSpeeds =
             new ChassisSpeeds(
                 twistForPose.dx / LOOP_TIME_S,
@@ -126,6 +140,8 @@ public class SwerveBase extends SubsystemBase {
                 twistForPose.dtheta / LOOP_TIME_S);
         return updatedSpeeds;
     }
+
+    //Twist2D represents a difference between two positions, ChassisSpeeds is the speed of the chasis (I think its a vector vs magnitude thing)
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         ChassisSpeeds desiredChassisSpeeds =
@@ -141,9 +157,17 @@ public class SwerveBase extends SubsystemBase {
                 translation.getY(),
                 rotation
         );
+
+        //Update Chasis speeds
         desiredChassisSpeeds = correctForDynamics(desiredChassisSpeeds);
+
+        //Give each swerve module the new chasis speeds
         SwerveModuleState[] swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(desiredChassisSpeeds);
+        
+        //When we add the new chasis speeds to each swerve module sometimes some of the swerve modules have a speed greater than the maximum speed, even if the initial speed and the added speed are below the max speed, so this method jsut normalizes the speed.
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
+
+        
         for(SwerveModule mod : swerveMods){
             mod.setDesiredState(swerveModuleStates[mod.getModuleNumber()], isOpenLoop);
         }
