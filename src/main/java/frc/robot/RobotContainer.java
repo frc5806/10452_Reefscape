@@ -30,6 +30,7 @@ import frc.robot.auto.Auto;
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.Swerve.AlignLimelight;
+import frc.robot.subsystems.Limelight.LimelightData;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Algae;
@@ -128,7 +129,7 @@ public class RobotContainer {
 
     public void configureDefaultCommands() {
 
-        if(limelight.isValidTargets()){
+        if(LimelightData.isValidTargets()){
             
         }
 
