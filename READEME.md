@@ -13,6 +13,7 @@ Spring Break Tasks:
 - Build LED Controllers
     - Should we change LEDs based on if the limelight recognizes an april tag or not?
     - Auto stuff - should we align and go to height at the same time?
+    - Auto limelight align command and teleop limelight align command
 
 Notes:
 - if you put in smartdashboard what alliance then it will reset your odomotry for you
