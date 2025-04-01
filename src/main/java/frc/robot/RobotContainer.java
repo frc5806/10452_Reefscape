@@ -42,6 +42,7 @@ import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Algae;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.LED;
 import frc.robot.subsystems.swerve.SwerveBase;
 import frc.lib.util.XboxController2;
 import edu.wpi.first.wpilibj.Servo;
@@ -49,6 +50,9 @@ import frc.robot.subsystems.LinearServo;
 import frc.robot.subsystems.Vision;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.RainbowAnimation;
 
@@ -78,17 +82,13 @@ public class RobotContainer {
     private final Coral coral = new Coral();
     private final Algae algae = new Algae();
     private final Climb climb = new Climb();
+    private final LED led = new LED();
 
     //Instantiate our camera (not limelight - this is for visuals) 
     private final Vision vision = new Vision();
 
     //Instantiate limelight handling class
     private final Limelight limelight = new Limelight();
-
-    //Crate a CANdle for visual controls of the robot
-    
-
-
 
     /* Commands */
     // private final Command AUTO_Path = new Auto(s_Swerve, shooter, intake).Path();

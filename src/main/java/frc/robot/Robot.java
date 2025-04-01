@@ -40,7 +40,6 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  private CANdle led;
   // public CameraServer mCamera;
 
   /**
@@ -52,16 +51,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    led = new CANdle(20);
-
-    // RainbowAnimation anim = new RainbowAnimation();
-    // led.animate(anim);
-    led.clearAnimation(0);
-    // led.setLEDs(80, 100, 170);
-    // led.animate(anim);
-    // led.setLEDs(255, 0, 0);
-    // led.modulateVBatOutput(0.9);
-    // led.configBrightnessScalar(0.1);
   
     // CameraServer.startAutomaticCapture(0);
     // SmartDashboard.putString("Path", CameraServer.startAutomaticCapture().getPath());
@@ -83,19 +72,6 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     LogManager.log();
-
-    
-    LimelightData.update();
-    Trigger aprilTag = new Trigger(LimelightData::isValidTargets);
-
-    aprilTag.onTrue(new InstantCommand( () -> {
-        SmartDashboard.putBoolean("LIMELIGHT HAS TARGET", true);
-        led.setLEDs(0,255,0);
-    })).onFalse(new InstantCommand( () -> {
-        led.setLEDs(255, 0, 0);
-        // RainbowAnimation anim = new RainbowAnimation(1, 0.1, -1);
-        // led.animate(anim);
-    }));
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
