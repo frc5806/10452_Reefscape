@@ -20,7 +20,7 @@ public class Limelight {
     public static double x;
     public static double y; 
     public static double area;
-    public static boolean validTargets; 
+    public static boolean isTarget; 
     public static double[] targetpose;
 
     public static class LimelightData {
@@ -39,7 +39,7 @@ public class Limelight {
             area = ta.getDouble(0.0);
 
             //This gets if there is a valid target which is also stored in the network tables.
-            validTargets = tv.getBoolean(false);
+            isTarget = tv.getBoolean(false);
 
             // Get the actual targeting data
             targetpose = targetpose_robotspace.getDoubleArray(new double[6]);
@@ -60,8 +60,8 @@ public class Limelight {
             return area;
         }
 
-        public static Boolean isValidTargets() {
-            return validTargets;
+        public static Boolean isValidTarget() {
+            return isTarget;
         }
 
         public static double[] getTargetpose() {
@@ -75,7 +75,7 @@ public class Limelight {
             double[] dataXYA = new double[]{LimelightData.getX(), LimelightData.getY(), LimelightData.getArea()};
 
             System.out.println("X: " + String.valueOf(dataXYA[0]) + ", Y: " + String.valueOf(dataXYA[1]) + ", Area: " + String.valueOf(dataXYA[2]));
-            System.out.println("ValidTargets: " + Boolean.valueOf(validTargets));
+            System.out.println("ValidTargets: " + Boolean.valueOf(isTarget));
         }
 
     }

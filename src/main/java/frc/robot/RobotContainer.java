@@ -128,6 +128,8 @@ public class RobotContainer {
         //Start the visual (not limelight) camera
         vision.startVision();
 
+        led.start();
+
         //Configure our bindings
         configureDefaultCommands();
         configureButtonBindings();
