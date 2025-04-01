@@ -9,6 +9,9 @@ import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
+import com.ctre.phoenix.led.CANdle;
+import com.ctre.phoenix.led.RainbowAnimation;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
@@ -17,7 +20,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.util.loggingUtil.LogManager;
+import frc.robot.subsystems.Limelight.LimelightData;
 import frc.robot.subsystems.Vision;
 
 // import frc.robot.subsystems.VTVisead;
@@ -33,6 +39,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+
+  private CANdle led;
   // public CameraServer mCamera;
 
   /**
@@ -44,6 +52,17 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    led = new CANdle(20);
+
+    // RainbowAnimation anim = new RainbowAnimation();
+    // led.animate(anim);
+    led.clearAnimation(0);
+    // led.setLEDs(80, 100, 170);
+    // led.animate(anim);
+    // led.setLEDs(255, 0, 0);
+    // led.modulateVBatOutput(0.9);
+    // led.configBrightnessScalar(0.1);
+  
     // CameraServer.startAutomaticCapture(0);
     // SmartDashboard.putString("Path", CameraServer.startAutomaticCapture().getPath());
   }
@@ -64,6 +83,19 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     LogManager.log();
+
+    
+    LimelightData.update();
+    Trigger aprilTag = new Trigger(LimelightData::isValidTargets);
+
+    aprilTag.onTrue(new InstantCommand( () -> {
+        SmartDashboard.putBoolean("LIMELIGHT HAS TARGET", true);
+        led.setLEDs(0,255,0);
+    })).onFalse(new InstantCommand( () -> {
+        led.setLEDs(255, 0, 0);
+        // RainbowAnimation anim = new RainbowAnimation(1, 0.1, -1);
+        // led.animate(anim);
+    }));
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

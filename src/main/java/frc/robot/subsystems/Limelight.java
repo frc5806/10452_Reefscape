@@ -4,6 +4,9 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import frc.robot.commands.Swerve.AlignLimelight;
+
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.cameraserver.CameraServer;
 
 public class Limelight {
@@ -57,7 +60,7 @@ public class Limelight {
             return area;
         }
 
-        public static boolean isValidTargets() {
+        public static Boolean isValidTargets() {
             return validTargets;
         }
 

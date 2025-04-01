@@ -3,6 +3,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.events.CancelCommandEvent;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -16,12 +17,17 @@ import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.net.PortForwarder;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -62,6 +68,12 @@ public class RobotContainer {
     // private final UsbCamera camera;
     // private final Servo linearActuator = new Servo(1);
 
+
+    //Identiy where the CANdle is
+
+    // private AddressableLED m_led;
+    // private AddressableLEDBuffer m_ledBuffer;
+
     private final Elevator elevator = new Elevator();
     private final Coral coral = new Coral();
     private final Algae algae = new Algae();
@@ -74,7 +86,7 @@ public class RobotContainer {
     private final Limelight limelight = new Limelight();
 
     //Crate a CANdle for visual controls of the robot
-    private final CANdle led;
+    
 
 
 
@@ -113,12 +125,6 @@ public class RobotContainer {
         // camera = CameraServer.startAutomaticCapture(0);
         // camera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
 
-        //Identiy where the CANdle is
-        led = new CANdle(4);
-        // Basic rainbow animation
-        RainbowAnimation anim = new RainbowAnimation();
-        led.animate(anim);
-
         //Start the visual (not limelight) camera
         vision.startVision();
 
@@ -129,9 +135,11 @@ public class RobotContainer {
 
     public void configureDefaultCommands() {
 
-        if(LimelightData.isValidTargets()){
-            
-        }
+        // if(LimelightData.isValidTargets()){
+        //     SmartDashboard.putBoolean("LIMELIGHT HAS TARGET", true);
+        //     led.setLEDs(0,255,0);
+        // }
+       
 
         //Configure bindings for serve
         s_Swerve.setDefaultCommand(
@@ -174,11 +182,11 @@ public class RobotContainer {
         driverController.povDown().onTrue(elevator.setElevatorPosition(-6));
 
         //Run climb
-        driverController.a().whileTrue(climb.climbMotor(0.6));
-        driverController.a().onFalse(climb.climbMotor(0));
+        driverController.a().whileTrue(climb.climbMotor(0.6, 0.4));
+        driverController.a().onFalse(climb.climbMotor(0, 0));
 
-        driverController.x().whileTrue(climb.climbMotor(-0.6));
-        driverController.x().onFalse(climb.climbMotor(0));
+        driverController.x().whileTrue(climb.climbMotor(-0.6, -0.4));
+        driverController.x().onFalse(climb.climbMotor(0, 0));
 
         driverController.b().onTrue(new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d()))));
         // driverController.b().onTrue(new InstantCommand(() -> elevator.resetEncoder()));
@@ -232,7 +240,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("elevatorReefL2", elevator_l2_coral);
         NamedCommands.registerCommand("elevatorReefL3", elevator_l3_coral);
         NamedCommands.registerCommand("elevatorAlgaeBottom", elevator_bottom_algae);
-        NamedCommands.registerCommand("elevatorAlgaeTop", elevator_top_algae);
+        NamedCommands.registerCommand("elevatorAlgaeTop", elevator_top_algae); 
 
         Command coral_up = coral.coralServoAutonomous(0.8);
         Command coral_down = coral.coralServoAutonomous(0.25);

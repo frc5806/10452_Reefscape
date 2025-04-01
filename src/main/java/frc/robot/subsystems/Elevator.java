@@ -14,6 +14,11 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import com.ctre.phoenix.led.Animation;
+import com.ctre.phoenix.led.CANdle;
+import com.ctre.phoenix.led.RgbFadeAnimation;
+import com.ctre.phoenix.led.RainbowAnimation;
+
 import com.revrobotics.RelativeEncoder;
 // import com.revrobotics.CANSparkLowLevel.MotorType; (Depreciated)
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -50,7 +55,6 @@ public class Elevator extends SubsystemBase {
         resetEncoder();
 
         elevatorPID = elevatorMotor0.getClosedLoopController();
-
     }
 
     public void configElevator() {
@@ -75,12 +79,13 @@ public class Elevator extends SubsystemBase {
 
     public void setPosition(double pos) {
         elevatorPID.setReference(pos, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+
     }
 
     public Command setElevatorPosition(double setpoint) {
         // If the elevator is set to the bottom, turn the motor off
         this.global_setpoint = setpoint;
-
+        
         if (setpoint == 0) {
 
             // return new Command() {
@@ -93,6 +98,7 @@ public class Elevator extends SubsystemBase {
             // return isfinished;
             // }
             // };
+
             return run(
                     () -> {
                         elevatorMotor0.set(0);
