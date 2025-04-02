@@ -1,9 +1,7 @@
 package frc.robot.subsystems.swerve;
 
-import com.pathplanner.lib.trajectory.PathPlannerTrajectory;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -51,16 +49,4 @@ public class AutoBase extends SequentialCommandGroup {
                 swerve::setModuleStates, swerve);
         return command;
     }
-
-    /**
-     * Creates a SwerveController Command using a Path Planner Trajectory
-     *
-     * @param trajectory a Path Planner Trajectory
-     * @return A SwerveControllerCommand for the robot to move
-     */
-    // Error
-    // public PPSwerveControllerCommand baseSwerveCommand(PathPlannerTrajectory trajectory) {
-    //     PPSwerveControllerCommand command = new PPSwerveControllerCommand(trajectory, swerve::getPose, Constants.Swerve.swerveKinematics, pidX, pidY, thetaController, swerve::setModuleStates, swerve);
-    //     return command;
-    // }
 }

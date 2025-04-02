@@ -1,28 +1,14 @@
 package frc.robot;
-
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.config.ModuleConfig;
-// import com.pathplanner.lib.util.PIDConstants; (Depreciated)
-import com.pathplanner.lib.config.PIDConstants;
-// import com.pathplanner.lib.util.ReplanningConfig; (PP removed replanning)
-// import com.revrobotics.CANSparkMax; (Depreciated)
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.measure.Velocity;
 import frc.lib.util.swerveUtil.COTSFalconSwerveConstants;
 import frc.lib.util.swerveUtil.RevSwerveModuleConstants;
+
 
 public final class Constants {
     public static final double stickDeadband = 0.05;
@@ -31,8 +17,6 @@ public final class Constants {
     public static final class Swerve {
 
         // Spark Max Idle Modes
-        // public static final CANSparkMax.IdleMode driveIdleMode = CANSparkMax.IdleMode.kBrake; (Depreciated)
-        // public static final CANSparkMax.IdleMode angleIdleMode = CANSparkMax.IdleMode.kBrake; (Depreciated)
         public static final IdleMode driveIdleMode = IdleMode.kBrake;
         public static final IdleMode angleIdleMode = IdleMode.kBrake;
 
@@ -163,6 +147,7 @@ public final class Constants {
 
     public static final class CameraConstants {
 
+        //Visual Camera constants
         public static final double ROLL = -Math.PI / 2;
         public static final double PITCH = 0.0;
         public static final double YAW = 0.0;
@@ -188,11 +173,13 @@ public final class Constants {
     }
 
     public static final class AutoConstants {
+        //Movement constants
         public static final double kMaxSpeedMetersPerSecond = 2;
         public static final double kMaxAccelerationMetersPerSecondSquared = 1;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI * 16;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI * 16;
 
+        //PID constants for x, y, and angle
         public static final double X_kP = 5;
         public static final double X_kI = 0;
         public static final double X_kD = 0;
@@ -212,26 +199,16 @@ public final class Constants {
                         kMaxAngularSpeedRadiansPerSecondSquared);
     }
 
-    public static final class IntakeConstants {
-        public static final int kIntakeMotorPort1 = 16; // 71=14?
-    }
-
-    public static final class ShooterConstants {
-        public static final int kShooterMotorPort1 = 14; // 16
-        public static final double SHOOTER_MAX_RPM = 5000;
-
-        public static final int kAmpPort = 16; // 13
-
-        public static final int beamBreakChannel = 0;
-    }
 
     // SPARK MAXES NOT WORKING: 8, 13, 10, 12
 
     public static final class ElevatorConstants {
+
+        //IDs for the elevator motors
         public static final int kElevatorMotorPort0 = 2; // 12
         public static final int kElevatorMotorPort1 = 3; // 10
 
-        // TODO: Test PID values
+        // These are all based on tested encoder values
         public static final double elevatorKP = 0.03;
         public static final double elevatorKI = 0;
         public static final double elevatorKD = 0.2; 
@@ -243,19 +220,23 @@ public final class Constants {
 
         public static final int maxElevatorPos = 250;
         public static final int minElevatorPos = 8;
+
+        public static final double thresholdFunction(double setpoint){
+            return (-2/10) * (setpoint+6) + 3.5;
+        }
     }
 
-    public static final class PivotConstants {
-        public static final int kPivotMotorPort1 = 50; 
-        public static final int kPivotMotorPort2 = 51; // TODO: Update
+    public static final class linearServoConstants{
+        //Max and min values for the linear actuators
 
-        // TODO: Test PID values
-        public static final int pivotkP = 1;
-        public static final int pivotkI = 0;
-        public static final int pivotKD = 0; 
+        public static final double kMaxServoAngle = 180.0;
+        public static final double kMinServoAngle = 0.0;
 
+        public static final int kDefaultMaxServoPWM = 2000;
+        public static final int kDefaultMinServoPWM = 1000;
     }
 
+    //Constants for Neomotors
     public static final class NeoMotorConstants {
         public static final double kFreeSpeedRpm = 5676;
     }

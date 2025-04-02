@@ -1,19 +1,12 @@
 package frc.robot.commands.Swerve;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.Constants.Swerve;
 import frc.robot.Constants.LimelightValues;
 import frc.robot.subsystems.Limelight.LimelightData;
 import frc.robot.subsystems.swerve.SwerveBase;
-import frc.robot.subsystems.Limelight;
-
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
 
 
 public class AlignLimelight extends Command {
@@ -31,29 +24,38 @@ public class AlignLimelight extends Command {
         addRequirements(Swerve);
     }
 
+    public double[] AimLimelight(double lateral_offset, double longitudinal_offset) {
+        double[] targetpose = LimelightData.getTargetpose(); // AprilTag location in Robot coordinate system {tx, ty, tz, roll, pitch, yaw}
+
+        double tx = targetpose[0];
+        double tz = targetpose[2];
+        double y_rot = targetpose[4];
+
+        double translationSpeed = (tz - longitudinal_offset);
+        double strafeSpeed = -(tx - lateral_offset);
+        double angularVelocity = -y_rot;
+
+        return new double[] {translationSpeed, strafeSpeed, angularVelocity};
+    }
+
     @Override
     public void execute() {
-        /* Get Values, Deadband*/
-        double strafeVal = Swerve.strafeLimelight(lateral_offset) * 2;
-        // Could add strafe value as well (using x value rather than turning)
-        double inOutVal = Swerve.rangeLimelight(longitudinal_offset) * 1.5;
-        double rotationVal = 0.03 * Swerve.aimLimelight() * Math.abs(1 / (10*Math.pow(strafeVal, 2) + 1));
+        double[] corrections = AimLimelight(lateral_offset, longitudinal_offset);
+
+        double longitudinalVal = corrections[1] * 1.5;
+        double lateralVal = corrections[2] * 2;
+        double rotationVal = 0.03 * corrections[3] * Math.abs(1 / (10*Math.pow(lateralVal, 2) + 1));
+
 
         //Updates numbers to smart dashbaord
-        SmartDashboard.putNumber("Limelight inOutVal", inOutVal);
-        SmartDashboard.putNumber("strafeVal", strafeVal);
+        SmartDashboard.putNumber("Limelight longitudinalVal", longitudinalVal);
+        SmartDashboard.putNumber("Limelight lateralVal", lateralVal);
         SmartDashboard.putNumber("Limelight rotationVal", rotationVal);
 
         /* Drive */
-        
-        //Drives the robot after getting translation values above
-
-        //We could in addition get the type of april tag and do different things depending on the type of april tag.
         Swerve.drive(
-                new Translation2d(inOutVal, strafeVal).times(Constants.Swerve.maxSpeed).times(0.3),
-                // new Translation2d(0, 0),
+                new Translation2d(longitudinalVal, lateralVal).times(Constants.Swerve.maxSpeed).times(0.3),
                 rotationVal * Constants.Swerve.maxAngularVelocity * (0.4),
-                // 0,
                 false, 
                 true
         );
@@ -63,20 +65,13 @@ public class AlignLimelight extends Command {
 
     @Override
     public boolean isFinished() {
-
         //Tests to make sure limelight is within accetable bounds of the april tag
+        double[] corrections = AimLimelight(lateral_offset, longitudinal_offset);
 
-        double strafeVal = Swerve.strafeLimelight(lateral_offset);
-        // Could add strafe value as well (using x value rather than turning)
-        double inOutVal = Swerve.rangeLimelight(longitudinal_offset);
-        double rotationVal = Swerve.aimLimelight();
-
-        boolean rotation_in_bounds = Math.abs(rotationVal) < LimelightValues.maxRotationError ? true : false;
-        boolean strafe_in_bounds = Math.abs(strafeVal) < LimelightValues.maxSideToSideError ? true : false;
-        System.out.println(strafeVal);
-        System.out.println(inOutVal);
-        boolean in_out_in_bounds = Math.abs(inOutVal) < LimelightValues.maxInOutError ? true : false;
-        System.out.println(rotation_in_bounds + " " + strafe_in_bounds + " " + in_out_in_bounds);
+        boolean in_out_in_bounds = Math.abs(corrections[1]) < LimelightValues.maxInOutError ? true : false;
+        boolean strafe_in_bounds = Math.abs(corrections[2]) < LimelightValues.maxSideToSideError ? true : false;
+        boolean rotation_in_bounds = Math.abs(corrections[3]) < LimelightValues.maxRotationError ? true : false;
+    
         return (rotation_in_bounds && strafe_in_bounds && in_out_in_bounds);
     }
  

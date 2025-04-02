@@ -5,13 +5,14 @@ import edu.wpi.first.hal.HAL;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.PWM;
+import frc.robot.Constants;
 
 public class LinearServo extends PWM {
-  private static final double kMaxServoAngle = 180.0;
-  private static final double kMinServoAngle = 0.0;
+  private static final double kMaxServoAngle = Constants.linearServoConstants.kMaxServoAngle;
+  private static final double kMinServoAngle = Constants.linearServoConstants.kMinServoAngle;
 
-  private static final int kDefaultMaxServoPWM = 2000;
-  private static final int kDefaultMinServoPWM = 1000;
+  private static final int kDefaultMaxServoPWM = Constants.linearServoConstants.kDefaultMaxServoPWM;
+  private static final int kDefaultMinServoPWM = Constants.linearServoConstants.kDefaultMinServoPWM;
 
   /**
    * Constructor.

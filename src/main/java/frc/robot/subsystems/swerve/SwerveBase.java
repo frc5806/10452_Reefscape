@@ -9,35 +9,19 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
-// import com.pathplanner.lib.util.HolonomicPathFollowerConfig; (Error)
-// import com.pathplanner.lib.util.PIDConstants; (Error)
-// import com.pathplanner.lib.util.ReplanningConfig; (Error)
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-
 import frc.lib.math.GeometryUtils;
-import frc.lib.util.PhotonCameraWrapper;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
-import frc.robot.subsystems.Limelight.LimelightData;
 import frc.robot.util.NavXGyro;
 
-import java.util.Map;
-
 public class SwerveBase extends SubsystemBase {
-
-    // public PhotonCameraWrapper cam = new PhotonCameraWrapper(Constants.CameraConstants.CAMERA_NAME,
-    //         Constants.CameraConstants.KCAMERA_TO_ROBOT.inverse());
-
     public SwerveDrivePoseEstimator swerveOdometer;
     public RevSwerveModule[] swerveMods;
     public NavXGyro gyro = NavXGyro.getInstance();
@@ -51,14 +35,6 @@ public class SwerveBase extends SubsystemBase {
     private final Field2d field = new Field2d();
     private boolean hasInitialized = false;
 
-
-    //TODO what is this doing?
-    private GenericEntry aprilTagTarget = RobotContainer.autoTab
-            .add("Currently Seeing April Tag", false).withWidget(BuiltInWidgets.kBooleanBox)
-            .withProperties(Map.of("Color when true", "green", "Color when false", "red"))
-            .withPosition(8, 4).withSize(2, 2).getEntry();
-
-    
     public SwerveBase() {
 
         //Establishes 4 different Swerve modules
@@ -257,45 +233,6 @@ public class SwerveBase extends SubsystemBase {
                                                                 swerveMods[1].getState(),
                                                                 swerveMods[2].getState(),
                                                                 swerveMods[3].getState()), getYaw());
-    }
-
-    public double aimLimelight(){
-        LimelightData.update();
-        double[] targetpose = LimelightData.getTargetpose();
-        double x_rot = targetpose[3];
-        double y_rot = targetpose[4];
-        double z_rot = targetpose[5];
-
-        double angularVelocity = -y_rot;
-
-        return angularVelocity;
-    }
-
-    public double strafeLimelight(double offset) {
-        LimelightData.update();
-        double[] targetpose = LimelightData.getTargetpose();
-        double tx = targetpose[0];
-        double ty = targetpose[1];
-        double tz = targetpose[2];
-        // System.out.println("tx: " + tx);
-
-        double strafeSpeed = -(tx - offset);
-
-        return strafeSpeed;
-    }
-
-    public double rangeLimelight(double offset) {
-        LimelightData.update();
-        double[] targetpose = LimelightData.getTargetpose();
-        double tx = targetpose[0];
-        double ty = targetpose[1];
-        double tz = targetpose[2];
-        // System.out.println("tz: " + tz);
-
-        double translationSpeed = (tz - offset);
-
-        return translationSpeed;
-        
     }
 
     @Override

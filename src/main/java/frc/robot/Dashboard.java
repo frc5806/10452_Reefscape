@@ -8,6 +8,7 @@ import edu.wpi.first.networktables.NetworkTableEvent;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+//Class to handle all the dashboard stuff
 public class Dashboard {
     private static NetworkTable sdTable = NetworkTableInstance.getDefault().getTable("SmartDashboard");  
 

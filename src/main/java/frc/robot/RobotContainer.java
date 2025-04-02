@@ -1,42 +1,18 @@
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.events.CancelCommandEvent;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkMaxConfig;
-
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
-// import com.pathplanner.lib.server.PathPlannerServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.net.PortForwarder;
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.auto.Auto;
-import frc.robot.commands.DriveToPoseCommand;
-import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.Swerve.AlignLimelight;
-import frc.robot.subsystems.Limelight.LimelightData;
+import frc.lib.util.XboxController2;
+/* Subsystem Imports */
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Algae;
@@ -44,18 +20,11 @@ import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.swerve.SwerveBase;
-import frc.lib.util.XboxController2;
-import edu.wpi.first.wpilibj.Servo;
-import frc.robot.subsystems.LinearServo;
 import frc.robot.subsystems.Vision;
-import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
-
-import java.util.function.BooleanSupplier;
-
-import com.ctre.phoenix.led.CANdle;
-import com.ctre.phoenix.led.RainbowAnimation;
-
+/* Command Imports */
+import frc.robot.commands.DriveToPoseCommand;
+import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.Swerve.AlignLimelight;
 
 public class RobotContainer {
     /* Shuffleboard */
@@ -64,40 +33,17 @@ public class RobotContainer {
     private final XboxController2 driverController = new XboxController2(0);
     private final XboxController2 operatorController = new XboxController2(1);
     /* Drive Controls */
-    private final double translationSpeedMod = 0.75; // Set back to 1
-    private final double rotationSpeedMod = 0.5; // Set back to 1
-    // private boolean precisionMode = false;
+    private final double translationSpeedMod = 0.75;
+    private final double rotationSpeedMod = 0.5;
     /* Subsystems */
     private final SwerveBase s_Swerve = new SwerveBase();
-    // private final UsbCamera camera;
-    // private final Servo linearActuator = new Servo(1);
-
-
-    //Identiy where the CANdle is
-
-    // private AddressableLED m_led;
-    // private AddressableLEDBuffer m_ledBuffer;
-
     private final Elevator elevator = new Elevator();
     private final Coral coral = new Coral();
     private final Algae algae = new Algae();
     private final Climb climb = new Climb();
     private final LED led = new LED();
-
-    //Instantiate our camera (not limelight - this is for visuals) 
     private final Vision vision = new Vision();
-
-    //Instantiate limelight handling class
     private final Limelight limelight = new Limelight();
-
-    /* Commands */
-    // private final Command AUTO_Path = new Auto(s_Swerve, shooter, intake).Path();
-    // private final Command AUTO_TwoRing = new Auto(s_Swerve, shooter,
-    // intake).TwoRingAuto();
-    // private final Command AUTO_full = new Auto(s_Swerve, shooter,
-    // intake).fullAuto();
-    // private final Command AUTO_SingleRing = new Auto(s_Swerve, shooter,
-    // intake).SingleRing();
 
     DriveToPoseCommand autoMoveCommand = new DriveToPoseCommand(
             s_Swerve,
@@ -109,40 +55,18 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        // NamedCommands.registerCommand("Intake",
-        // intake.runIntake(0.9).withTimeout(3));
-
-        /* Auto */
-        // PathPlannerServer.startServer(5811);
-        // movementChooser.setDefaultOption("taxi", new Taxi(s_Swerve));
-        // movementChooser.addOption("No Movement", new InstantCommand());
-        // SmartDashboard.putData("Movement", movementChooser);
-
-        /* Networking */
+        // Networking
         PortForwarder.add(5800, "10.75.58.06", 5800);
         PortForwarder.add(1181, "10.75.58.06", 1181);
 
-        // camera = CameraServer.startAutomaticCapture(0);
-        // camera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+        vision.startVision(); // Webcam
+        led.start(); // LEDs
 
-        //Start the visual (not limelight) camera
-        vision.startVision();
-
-        led.start();
-
-        //Configure our bindings
         configureDefaultCommands();
         configureButtonBindings();
     }
 
     public void configureDefaultCommands() {
-
-        // if(LimelightData.isValidTargets()){
-        //     SmartDashboard.putBoolean("LIMELIGHT HAS TARGET", true);
-        //     led.setLEDs(0,255,0);
-        // }
-       
-
         //Configure bindings for serve
         s_Swerve.setDefaultCommand(
                 new TeleopSwerve(
@@ -150,12 +74,8 @@ public class RobotContainer {
                         () -> -driverController.getLeftY() * translationSpeedMod,
                         () -> -driverController.getLeftX() * translationSpeedMod,
                         () -> -driverController.getRightX() * rotationSpeedMod,
-                        () -> driverController.y().getAsBoolean(), // driverController.getRawButtonPressed(XboxController.Button.kY.value),
+                        () -> driverController.y().getAsBoolean(),
                         () -> false));
-
-        // elevator.setDefaultCommand(
-        // new ElevatorHardstop(elevator, () -> operatorController.getLeftY())
-        // );
     }
 
     /**
@@ -167,72 +87,75 @@ public class RobotContainer {
      * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-
-        
-
-
-        // -------------------- Driver Controller --------------------
-        driverController.rightTrigger().whileTrue(new AlignLimelight(s_Swerve, -0.12, 0.3));
-        driverController.leftTrigger().whileTrue(new AlignLimelight(s_Swerve, 0.2, 0.3));
-
-        //Run elevator with POV and bumpers
-        driverController.rightBumper().onTrue(elevator.setElevatorPosition(-16.5));
-        driverController.leftBumper().onTrue(elevator.setElevatorPosition(-9.75));
-        
-        driverController.povLeft().onTrue(elevator.setElevatorPosition(-13));
-        driverController.povRight().onTrue(elevator.setElevatorPosition(0));
-        driverController.povDown().onTrue(elevator.setElevatorPosition(-6));
-
-        //Run climb
+        /* Driver Controller */
+        // Climb in
         driverController.a().whileTrue(climb.climbMotor(0.6, 0.4));
         driverController.a().onFalse(climb.climbMotor(0, 0));
 
+        // Climb out
         driverController.x().whileTrue(climb.climbMotor(-0.6, -0.4));
         driverController.x().onFalse(climb.climbMotor(0, 0));
 
+        // Reset swerve odometry
         driverController.b().onTrue(new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d()))));
         // driverController.b().onTrue(new InstantCommand(() -> elevator.resetEncoder()));
 
-        driverController.y().onTrue(new InstantCommand(() -> System.out.println(elevator.getEncoderPos())));
+        // driverController.y().onTrue(new InstantCommand(() -> System.out.println(elevator.getEncoderPos())));
 
-        // -------------------- Operator Controller --------------------
-
-        //Run each servo with a, x, y, b, and start for a algae ground intake
-        operatorController.x().onTrue(coral.coralServo(0.82));
+        //Run elevator with POV and bumpers
+        driverController.rightBumper().onTrue(elevator.setElevatorPosition(-16.5)); // Algae 3
+        driverController.leftBumper().onTrue(elevator.setElevatorPosition(-9.75)); // Algae 2
         
-        operatorController.a().onTrue(coral.coralServo(0.25));
+        driverController.povLeft().onTrue(elevator.setElevatorPosition(-13)); // Coral 3
+        driverController.povDown().onTrue(elevator.setElevatorPosition(-6)); // Coral 2
+        driverController.povRight().onTrue(elevator.setElevatorPosition(0)); // Coral 1
+
+        // Align limelight to april tag
+        driverController.rightTrigger().whileTrue(new AlignLimelight(s_Swerve, -0.12, 0.3)); // Left
+        driverController.leftTrigger().whileTrue(new AlignLimelight(s_Swerve, 0.2, 0.3)); // Right
+
+        /* Operator Controller */
+        operatorController.a().onTrue(coral.coralServo(0.25)); // Coral down
+
+        operatorController.x().onTrue(coral.coralServo(0.82)); // Coral up
         
-        operatorController.y().onTrue(algae.algaeServo(0.7));
+        operatorController.b().onTrue(algae.algaeServo(0)); // Algae down
+        
+        operatorController.y().onTrue(algae.algaeServo(0.7)); // Algae up
 
-        operatorController.b().onTrue(algae.algaeServo(0));
+        operatorController.start().onTrue(algae.algaeServo(0.2)); // Algae intake
 
-        operatorController.start().onTrue(algae.algaeServo(0.2));
-
-        //Run motors with bumpers and triggers
+        // Coral in
         operatorController.leftBumper().whileTrue(coral.coralMotor(0.4));
         operatorController.leftBumper().whileFalse(coral.coralMotor(0));
+    
+        // Coral out
         operatorController.leftTrigger().whileTrue(coral.coralMotor(-0.4));
         operatorController.leftTrigger().whileFalse(coral.coralMotor(0));
 
+        // Algae in
         operatorController.rightTrigger().whileTrue(algae.algaeMotor(0.8));
         operatorController.rightTrigger().whileFalse(algae.algaeMotor(0));
+
+        // Algae out
         operatorController.rightBumper().whileTrue(algae.algaeMotor(-0.6));
         operatorController.rightBumper().whileFalse(algae.algaeMotor(0));
     }
 
-    /*
+    /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
 
-        //A number of named commands that can be referenced within path planner to create autonous routines
+        // Limelight autonomous commands
         Command align_left = new AlignLimelight(s_Swerve, 0.2, 0.3);
         Command align_right = new AlignLimelight(s_Swerve, -0.12, 0.3);
         NamedCommands.registerCommand("alignLimelightLeft", align_left);
         NamedCommands.registerCommand("alignLimelightRight", align_right);
 
+        // Elevator autonomous commands
         Command elevator_down = elevator.setElevatorPositionAutonomous(0);
         Command elevator_l2_coral = elevator.setElevatorPositionAutonomous(-6);
         Command elevator_l3_coral = elevator.setElevatorPositionAutonomous(-13);
@@ -244,6 +167,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("elevatorAlgaeBottom", elevator_bottom_algae);
         NamedCommands.registerCommand("elevatorAlgaeTop", elevator_top_algae); 
 
+        // Coral autonomous commands
         Command coral_up = coral.coralServoAutonomous(0.8);
         Command coral_down = coral.coralServoAutonomous(0.25);
         Command coral_intake = coral.coralMotorAutonomous(0.4);
@@ -253,18 +177,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("coralIntake", coral_intake);
         NamedCommands.registerCommand("coralShoot", coral_shoot);
 
-        //Register a specific autonomous routine from path planner (that uses the above named commands) as our autonomous
+        // Register a specific auto from PathPlanner (that uses the above named commands) as our routine to run
         PathPlannerAuto autoCommand = new PathPlannerAuto("PracticeAuto");
         return autoCommand;
-
-        
-        // Run path
-        // try {
-        // return AutoBuilder.followPath(PathPlannerPath.fromPathFile("Straight"));
-        // } catch (Exception e) {
-        // return Commands.none();
-        // }
-        // return AUTO_full;
     }
-
 }

@@ -4,12 +4,9 @@
 
 package frc.robot.util;
 
-// import com.kauailabs.navx.frc.AHRS; (Depreciated)
 import com.studica.frc.AHRS;
-import com.studica.frc.AHRS.NavXComType;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.SPI;
 
 public class NavXGyro extends AHRS{
 

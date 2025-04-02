@@ -4,29 +4,10 @@
 
 package frc.robot;
 
-import org.opencv.core.Mat;
-import org.opencv.core.Point;
-import org.opencv.core.Scalar;
-import org.opencv.imgproc.Imgproc;
-
-import com.ctre.phoenix.led.CANdle;
-import com.ctre.phoenix.led.RainbowAnimation;
-
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.CvSink;
-import edu.wpi.first.cscore.CvSource;
-import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.util.loggingUtil.LogManager;
-import frc.robot.subsystems.Limelight.LimelightData;
-import frc.robot.subsystems.Vision;
-
-// import frc.robot.subsystems.VTVisead;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -40,8 +21,6 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  // public CameraServer mCamera;
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -51,9 +30,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-  
-    // CameraServer.startAutomaticCapture(0);
-    // SmartDashboard.putString("Path", CameraServer.startAutomaticCapture().getPath());
   }
   
   /**

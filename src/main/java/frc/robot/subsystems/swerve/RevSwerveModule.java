@@ -2,24 +2,15 @@
 package frc.robot.subsystems.swerve;
 
 import com.ctre.phoenix6.hardware.CANcoder;
-// import com.revrobotics.CANSparkMax; (Depreciated)
-// import com.revrobotics.CANSparkBase.ControlType; (Depreciated)
-// import com.revrobotics.CANSparkBase.FaultID; (Depreciated)
-// import com.revrobotics.SparkPIDController; (Depreciated)
-// import com.revrobotics.CANSparkLowLevel.MotorType; (Depreciated)
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
-import com.revrobotics.spark.SparkBase.Faults;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.AbsoluteEncoderConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.RelativeEncoder;
-
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -62,13 +53,11 @@ public class RevSwerveModule implements SwerveModule
 
 
         /* Angle Motor Config */
-        // mAngleMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless); (Depreciated)
         mAngleMotor = new SparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
         angleConfig = new SparkMaxConfig();
         configAngleMotor();
 
         /* Drive Motor Config */
-        // mDriveMotor = new CANSparkMax(moduleConstants.driveMotorID,  MotorType.kBrushless); (Depreciated)
         mDriveMotor = new SparkMax(moduleConstants.driveMotorID,  MotorType.kBrushless);
         driveConfig = new SparkMaxConfig();
         configDriveMotor();
@@ -91,28 +80,17 @@ public class RevSwerveModule implements SwerveModule
         angleEncoder.getPosition().setUpdateFrequency(100);
         angleEncoder.getVelocity().setUpdateFrequency(100);
 
-        // Depreciated
         relDriveEncoder = mDriveMotor.getEncoder();
         relDriveEncoder.setPosition(0);
 
-        // Depreciated
-        // relDriveEncoder.setPositionConversionFactor(Constants.Swerve.driveRevToMeters);
-        // relDriveEncoder.setVelocityConversionFactor(Constants.Swerve.driveRpmToMetersPerSecond);
         driveConfig.encoder.positionConversionFactor(Constants.Swerve.driveRevToMeters);
         driveConfig.encoder.velocityConversionFactor(Constants.Swerve.driveRpmToMetersPerSecond);
 
-        // Depreciated
         relAngleEncoder = mAngleMotor.getEncoder();
-        // relAngleEncoder.setPositionConversionFactor(Constants.Swerve.DegreesPerTurnRotation);
-        // in degrees/sec
-        // relAngleEncoder.setVelocityConversionFactor(Constants.Swerve.DegreesPerTurnRotation / 60);
-
         angleConfig.encoder.positionConversionFactor(Constants.Swerve.DegreesPerTurnRotation);
         angleConfig.encoder.velocityConversionFactor(Constants.Swerve.DegreesPerTurnRotation / 60);
 
         synchronizeEncoders();
-        // mDriveMotor.burnFlash(); (Depreciated)
-        // mAngleMotor.burnFlash(); (Depreciated)
         mDriveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         mAngleMotor.configure(angleConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -120,15 +98,7 @@ public class RevSwerveModule implements SwerveModule
 
     private void configAngleMotor()
     {
-        // Depreciated
-        // mAngleMotor.restoreFactoryDefaults();
-        // SparkPIDController controller = mAngleMotor.getPIDController();
-        // controller.setP(Constants.Swerve.angleKP, 0);
-        // controller.setI(Constants.Swerve.angleKI,0);
-        // controller.setD(Constants.Swerve.angleKD,0);
-        // controller.setFF(Constants.Swerve.angleKFF,0);
-        // controller.setOutputRange(-Constants.Swerve.anglePower, Constants.Swerve.anglePower);
-        // mAngleMotor.setSmartCurrentLimit(Constants.Swerve.angleContinuousCurrentLimit);
+
 
         angleConfig.closedLoop.p(Constants.Swerve.angleKP, ClosedLoopSlot.kSlot0);
         angleConfig.closedLoop.i(Constants.Swerve.angleKI, ClosedLoopSlot.kSlot0);
@@ -136,11 +106,6 @@ public class RevSwerveModule implements SwerveModule
         angleConfig.closedLoop.velocityFF(Constants.Swerve.angleKFF, ClosedLoopSlot.kSlot0);
         angleConfig.closedLoop.outputRange(-Constants.Swerve.anglePower, Constants.Swerve.anglePower);
         angleConfig.smartCurrentLimit(Constants.Swerve.angleContinuousCurrentLimit);
-
-        // Depreciated
-        // mAngleMotor.setInverted(Constants.Swerve.angleMotorInvert);
-        // mAngleMotor.setIdleMode(Constants.Swerve.angleIdleMode);
-        // mAngleMotor.setClosedLoopRampRate(Constants.Swerve.angleRampRate);
 
         angleConfig.inverted(Constants.Swerve.angleMotorInvert);
         angleConfig.idleMode(Constants.Swerve.angleIdleMode);
@@ -150,18 +115,6 @@ public class RevSwerveModule implements SwerveModule
 
     private void configDriveMotor()
     {
-        // Depreciated
-        // mDriveMotor.restoreFactoryDefaults();
-        // SparkClosedLoopController controller = mDriveMotor.getClosedLoopController();
-        // controller.setP(Constants.Swerve.driveKP,0);
-        // controller.setI(Constants.Swerve.driveKI,0);
-        // controller.setD(Constants.Swerve.driveKD,0);
-        // controller.setFF(Constants.Swerve.driveKFF,0);
-        // controller.setOutputRange(-Constants.Swerve.drivePower, Constants.Swerve.drivePower);
-        // mDriveMotor.setSmartCurrentLimit(Constants.Swerve.driveContinuousCurrentLimit);
-        // mDriveMotor.setInverted(Constants.Swerve.driveMotorInvert);
-        // mDriveMotor.setIdleMode(Constants.Swerve.driveIdleMode);
-
         driveConfig.closedLoop.p(Constants.Swerve.driveKP, ClosedLoopSlot.kSlot0);
         driveConfig.closedLoop.i(Constants.Swerve.driveKI, ClosedLoopSlot.kSlot0);
         driveConfig.closedLoop.d(Constants.Swerve.driveKD, ClosedLoopSlot.kSlot0);
@@ -182,13 +135,11 @@ public class RevSwerveModule implements SwerveModule
         setAngle(this.desiredState);
         setSpeed(this.desiredState, isOpenLoop);
 
-        // if(mDriveMotor.getFault(FaultID.kSensorFault)) (Depreciated)
         if(mDriveMotor.getFaults().sensor)
         {
             DriverStation.reportWarning("Sensor Fault on Drive Motor ID:"+mDriveMotor.getDeviceId(), false);
         }
 
-        // if(mAngleMotor.getFault(FaultID.kSensorFault)) (Depreciated)
         if(mAngleMotor.getFaults().sensor)
         {
             DriverStation.reportWarning("Sensor Fault on Angle Motor ID:"+mAngleMotor.getDeviceId(), false);
@@ -208,7 +159,6 @@ public class RevSwerveModule implements SwerveModule
         double velocity = desiredState.speedMetersPerSecond;
 
         SparkClosedLoopController controller = mDriveMotor.getClosedLoopController();
-        // controller.setReference(velocity, ControlType.kVelocity, 0); (Depreciated)
         controller.setReference(velocity, ControlType.kVelocity, ClosedLoopSlot.kSlot0);
 
     }
@@ -234,7 +184,6 @@ public class RevSwerveModule implements SwerveModule
 
         SparkClosedLoopController controller = mAngleMotor.getClosedLoopController();
 
-        // controller.setReference(degReference, ControlType.kPosition, 0); (Depreciated)
         controller.setReference(degReference, ControlType.kPosition, ClosedLoopSlot.kSlot0);
     }
 

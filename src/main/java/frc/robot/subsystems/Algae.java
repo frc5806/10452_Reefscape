@@ -19,6 +19,7 @@ public class Algae extends SubsystemBase {
     private final SparkMaxConfig algaeConfig;
 
     public Algae() {
+        //Identify each part of the algae system
         algaeServo1 = new LinearServo(0);
         algaeServo2 = new LinearServo(2);
         algaeMotor = new SparkMax(12, MotorType.kBrushless);
@@ -26,17 +27,21 @@ public class Algae extends SubsystemBase {
         configAlgae();
     }
 
+    //configure algae motor
     private void configAlgae() {
+        //Has to be braking so can hold coral there
         algaeConfig.idleMode(IdleMode.kBrake);
         algaeMotor.configure(algaeConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
+    //Set the algae linear actuator position
     public Command algaeServo(double position) {
         return run(
             () -> { algaeServo1.set(position); algaeServo2.set(position); }
         );
     }
 
+    //Command to run the algaemotor at a set speed
     public Command algaeMotor(double speed) {
         return run(
             () -> { algaeMotor.set(speed); }
