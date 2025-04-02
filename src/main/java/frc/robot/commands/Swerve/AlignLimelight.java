@@ -47,9 +47,9 @@ public class AlignLimelight extends Command {
     public void execute() {
         double[] corrections = AimLimelight(lateral_offset, longitudinal_offset);
 
-        double longitudinalVal = corrections[1] * 1.5;
-        double lateralVal = corrections[2] * 2;
-        double rotationVal = 0.03 * corrections[3] * Math.abs(1 / (10*Math.pow(lateralVal, 2) + 1));
+        double longitudinalVal = corrections[0] * 1.5;
+        double lateralVal = corrections[1] * 2;
+        double rotationVal = 0.03 * corrections[2] * Math.abs(1 / (10*Math.pow(lateralVal, 2) + 1));
 
 
         //Updates numbers to smart dashbaord
@@ -73,9 +73,9 @@ public class AlignLimelight extends Command {
         //Tests to make sure limelight is within accetable bounds of the april tag
         double[] corrections = AimLimelight(lateral_offset, longitudinal_offset);
 
-        boolean in_out_in_bounds = Math.abs(corrections[1]) < LimelightValues.maxInOutError ? true : false;
-        boolean strafe_in_bounds = Math.abs(corrections[2]) < LimelightValues.maxSideToSideError ? true : false;
-        boolean rotation_in_bounds = Math.abs(corrections[3]) < LimelightValues.maxRotationError ? true : false;
+        boolean in_out_in_bounds = Math.abs(corrections[0]) < LimelightValues.maxInOutError ? true : false;
+        boolean strafe_in_bounds = Math.abs(corrections[1]) < LimelightValues.maxSideToSideError ? true : false;
+        boolean rotation_in_bounds = Math.abs(corrections[2]) < LimelightValues.maxRotationError ? true : false;
     
         return (rotation_in_bounds && strafe_in_bounds && in_out_in_bounds);
     }

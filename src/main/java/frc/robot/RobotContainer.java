@@ -21,6 +21,7 @@ import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.swerve.SwerveBase;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.Limelight.LimelightData;
 /* Command Imports */
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.TeleopSwerve;
@@ -62,6 +63,8 @@ public class RobotContainer {
 
         configureDefaultCommands();
         configureButtonBindings();
+
+        // LimelightData.setOn();
     }
 
     public void configureDefaultCommands() {

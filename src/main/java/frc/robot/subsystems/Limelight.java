@@ -16,13 +16,13 @@ public class Limelight {
     static NetworkTableEntry tv = table.getEntry("tv");
     static NetworkTableEntry targetpose_robotspace = table.getEntry("targetpose_robotspace");
 
-    public static boolean isTarget; 
+    public static long isTarget; 
     public static double[] targetpose;
 
     public static class LimelightData {
         public static void update() {
             // Boolean if an AprilTag is detected
-            isTarget = tv.getBoolean(false);
+            isTarget = tv.getInteger(0);
 
             // AprilTag location in Robot coordinate system {tx, ty, tz, roll, pitch, yaw}
             targetpose = targetpose_robotspace.getDoubleArray(new double[6]);
@@ -30,7 +30,7 @@ public class Limelight {
 
         public static Boolean isValidTarget() {
             update();
-            return isTarget;
+            return (isTarget == 1);
         }
 
         public static double[] getTargetpose() {
@@ -41,12 +41,12 @@ public class Limelight {
         public static void setIdle() {
             // Set the camera to process only every 150 frames
             // Set to 100-200 while disabled
-            NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(150);
+            table.getEntry("throttle_set").setNumber(0);
         }
 
         public static void setOn() {
             // Set the camera to process every frame
-            NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);
+            table.getEntry("throttle_set").setNumber(0);
         }
     }
 }

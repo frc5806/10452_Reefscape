@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import com.ctre.phoenix.led.RainbowAnimation;
 
 public class LED extends SubsystemBase {
     private CANdle lights;
@@ -24,10 +25,10 @@ public class LED extends SubsystemBase {
         // RainbowAnimation anim = new RainbowAnimation(1, 0.1, -1);
         // lights.animate(anim);
 
-        lights.clearAnimation(0);
+        // lights.clearAnimation(0);
         
         //Auto sets to Red, maybe autoset to rainbow?
-        lights.setLEDs(255, 0, 0);
+        // lights.setLEDs(255, 0, 0);
         
     }
 
@@ -37,9 +38,12 @@ public class LED extends SubsystemBase {
 
     public void update() {
         if (LimelightData.isValidTarget()){
-            lights.setLEDs(0, 255, 0);
-        } else {
+            lights.clearAnimation(0);
             lights.setLEDs(255, 0, 0);
+        } else {
+            // lights.setLEDs(255, 0, 0);
+            RainbowAnimation anim = new RainbowAnimation(1, 0.3, -1);
+            lights.animate(anim);
         }
     }
 }
