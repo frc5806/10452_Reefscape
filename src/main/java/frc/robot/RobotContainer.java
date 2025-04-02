@@ -19,7 +19,6 @@ import frc.robot.subsystems.Coral;
 import frc.robot.subsystems.Algae;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.LED;
 import frc.robot.subsystems.swerve.SwerveBase;
 import frc.robot.subsystems.Vision;
 /* Command Imports */
@@ -42,7 +41,6 @@ public class RobotContainer {
     private final Coral coral = new Coral();
     private final Algae algae = new Algae();
     private final Climb climb = new Climb();
-    private final LED led = new LED();
     // private final Vision vision = new Vision();
     private final Limelight limelight = new Limelight();
 

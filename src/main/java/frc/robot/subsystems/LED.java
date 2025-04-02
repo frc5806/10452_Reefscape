@@ -34,4 +34,12 @@ public class LED extends SubsystemBase {
     public void set(int r, int g, int b) {
         lights.setLEDs(r, g, b);
     }
+
+    public void update() {
+        if (LimelightData.isValidTarget()){
+            lights.setLEDs(0, 255, 0);
+        } else {
+            lights.setLEDs(255, 0, 0);
+        }
+    }
 }
