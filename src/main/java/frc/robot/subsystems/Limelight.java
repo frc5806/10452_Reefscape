@@ -4,6 +4,13 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
+/*
+ * Limelight 4's thermal output can be reduced by setting the
+ * Throttle parameter to 100-200 while disabled, and to 0 while
+ * enabled. Alternatively, you can switch to a viewfinder pipeline 
+ * while disabled.
+ */
+
 public class Limelight {
     static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     static NetworkTableEntry tv = table.getEntry("tv");
