@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.util.XboxController2;
 /* Subsystem Imports */
 import frc.robot.subsystems.Elevator;
@@ -42,7 +43,7 @@ public class RobotContainer {
     private final Algae algae = new Algae();
     private final Climb climb = new Climb();
     private final LED led = new LED();
-    private final Vision vision = new Vision();
+    // private final Vision vision = new Vision();
     private final Limelight limelight = new Limelight();
 
     DriveToPoseCommand autoMoveCommand = new DriveToPoseCommand(
@@ -59,8 +60,7 @@ public class RobotContainer {
         PortForwarder.add(5800, "10.75.58.06", 5800);
         PortForwarder.add(1181, "10.75.58.06", 1181);
 
-        vision.startVision(); // Webcam
-        led.start(); // LEDs
+        // vision.startVision(); // Webcam
 
         configureDefaultCommands();
         configureButtonBindings();
