@@ -37,5 +37,16 @@ public class Limelight {
             update();
             return targetpose;
         }
+
+        public static void setIdle() {
+            // Set the camera to process only every 150 frames
+            // Set to 100-200 while disabled
+            NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(150);
+        }
+
+        public static void setOn() {
+            // Set the camera to process every frame
+            NetworkTableInstance.getDefault().getTable("limelight").getEntry("throttle_set").setNumber(0);
+        }
     }
 }

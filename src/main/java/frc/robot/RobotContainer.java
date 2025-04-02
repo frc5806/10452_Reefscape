@@ -87,15 +87,23 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Controller */
         // Climb in
-        driverController.a().whileTrue(climb.climbMotor(0.6, 0.4));
+        driverController.b().whileTrue(climb.climbMotor(0.6, 0));
+        driverController.b().onFalse(climb.climbMotor(0, 0));
+
+        // Climb out
+        driverController.y().whileTrue(climb.climbMotor(-0.6, 0));
+        driverController.y().onFalse(climb.climbMotor(0, 0));
+
+        // Climb in
+        driverController.a().whileTrue(climb.climbMotor(0, -0.4));
         driverController.a().onFalse(climb.climbMotor(0, 0));
 
         // Climb out
-        driverController.x().whileTrue(climb.climbMotor(-0.6, -0.4));
+        driverController.x().whileTrue(climb.climbMotor(0, 0.4));
         driverController.x().onFalse(climb.climbMotor(0, 0));
 
         // Reset swerve odometry
-        driverController.b().onTrue(new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d()))));
+        // driverController.b().onTrue(new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d()))));
         // driverController.b().onTrue(new InstantCommand(() -> elevator.resetEncoder()));
 
         // driverController.y().onTrue(new InstantCommand(() -> System.out.println(elevator.getEncoderPos())));

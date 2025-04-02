@@ -39,6 +39,11 @@ public class AlignLimelight extends Command {
     }
 
     @Override
+    public void initialize() {
+        LimelightData.setOn();
+    }
+
+    @Override
     public void execute() {
         double[] corrections = AimLimelight(lateral_offset, longitudinal_offset);
 
@@ -85,5 +90,7 @@ public class AlignLimelight extends Command {
             false, 
             true
         );
+
+        LimelightData.setIdle();
     }
 }
