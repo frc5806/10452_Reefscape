@@ -38,6 +38,40 @@ public class AlignLimelight extends Command {
         return new double[] {translationSpeed, strafeSpeed, angularVelocity};
     }
 
+    // private void walkForward() {
+    //     class TimedCommand extends Command {
+    //         public TimedCommand(double time){
+    //             setTimeout(0.5);
+    //         }
+
+    //         public void initialize() {
+    //             setTimeout(.9);
+    //         }
+            
+    //         public void execute() {
+    //             Swerve.drive(
+    //                 new Translation2d(0, 0.1),
+    //                 0,
+    //                 false, 
+    //                 true
+    //             );
+    //         }
+            
+    //         public boolean isFinished() {
+    //             return isTimedOut();
+    //         }
+            
+    //         public void end() {
+    //             Swerve.drive(
+    //                 new Translation2d(0, 0),
+    //                 0,
+    //                 false, 
+    //                 true
+    //             );
+    //         }
+    //     }
+    // }
+
     @Override
     public void initialize() {
         LimelightData.setOn();
@@ -82,6 +116,7 @@ public class AlignLimelight extends Command {
  
     @Override
     public void end(boolean interrupted){
+        // walkForward();
 
         //When the command ends stop the robot moving
         Swerve.drive(

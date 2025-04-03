@@ -18,3 +18,9 @@ Spring Break Tasks:
 
 Notes:
 - if you put in smartdashboard what alliance then it will reset your odomotry for you
+
+
+TODO:
+- Tigthenscrews
+- Wrap LED end
+- Get locknuts for

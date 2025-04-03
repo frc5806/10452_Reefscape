@@ -104,9 +104,6 @@ public class RobotContainer {
         // Climb out
         driverController.x().whileTrue(climb.climbMotor(0, 0.4));
         driverController.x().onFalse(climb.climbMotor(0, 0));
-
-        // Reset swerve odometry
-        // driverController.b().onTrue(new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d()))));
         // driverController.b().onTrue(new InstantCommand(() -> elevator.resetEncoder()));
 
         // driverController.y().onTrue(new InstantCommand(() -> System.out.println(elevator.getEncoderPos())));
@@ -115,6 +112,9 @@ public class RobotContainer {
         driverController.rightBumper().onTrue(elevator.setElevatorPosition(-16.5)); // Algae 3
         driverController.leftBumper().onTrue(elevator.setElevatorPosition(-9.75)); // Algae 2
         
+        // Reset swerve odometry
+        driverController.povUp().onTrue(new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d()))));
+
         driverController.povLeft().onTrue(elevator.setElevatorPosition(-13)); // Coral 3
         driverController.povDown().onTrue(elevator.setElevatorPosition(-6)); // Coral 2
         driverController.povRight().onTrue(elevator.setElevatorPosition(0)); // Coral 1
