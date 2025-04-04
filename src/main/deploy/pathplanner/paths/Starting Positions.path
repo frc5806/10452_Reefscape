@@ -4,24 +4,40 @@
     {
       "anchor": {
         "x": 1.225,
-        "y": 5.855
+        "y": 5.85
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.475,
-        "y": 5.855
+        "x": 1.2263010154487342,
+        "y": 5.141324312421948
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.7757653061224494,
-        "y": 4.095886479591837
+        "x": 1.2249999999999999,
+        "y": 4.025
       },
       "prevControl": {
-        "x": 2.5257653061224494,
-        "y": 4.095886479591837
+        "x": 1.2474813961306759,
+        "y": 4.691241222930692
+      },
+      "nextControl": {
+        "x": 1.202172666819299,
+        "y": 3.348506854905495
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.225,
+        "y": 2.19
+      },
+      "prevControl": {
+        "x": 1.2157108251077637,
+        "y": 3.1238930524670225
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +61,7 @@
     "rotation": 0.0
   },
   "reversed": false,
-  "folder": "Blue Auton",
+  "folder": "Locations",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

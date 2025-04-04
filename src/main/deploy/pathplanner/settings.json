@@ -3,7 +3,7 @@
   "robotLength": 1.0,
   "holonomicMode": true,
   "pathFolders": [
-    "Blue Auton"
+    "Locations"
   ],
   "autoFolders": [
     "New Folder"
