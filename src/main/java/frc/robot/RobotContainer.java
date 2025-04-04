@@ -25,7 +25,8 @@ import frc.robot.subsystems.Limelight.LimelightData;
 /* Command Imports */
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.Swerve.AlignLimelight;
+import frc.robot.commands.Swerve.AlignLimelightCoral;
+import frc.robot.commands.Swerve.AlignLimelightReef;
 
 public class RobotContainer {
     /* Shuffleboard */
@@ -107,6 +108,12 @@ public class RobotContainer {
         // driverController.b().onTrue(new InstantCommand(() -> elevator.resetEncoder()));
 
         // driverController.y().onTrue(new InstantCommand(() -> System.out.println(elevator.getEncoderPos())));
+        
+        // Align to coral station
+        driverController.start().whileTrue(new AlignLimelightCoral(s_Swerve, 0.2, 0.3));
+
+        // Align to algae on Reef
+        driverController.back().whileTrue(new AlignLimelightReef(s_Swerve, 0.04, 0.3));
 
         //Run elevator with POV and bumpers
         driverController.rightBumper().onTrue(elevator.setElevatorPosition(-16.5)); // Algae 3
@@ -120,8 +127,9 @@ public class RobotContainer {
         driverController.povRight().onTrue(elevator.setElevatorPosition(0)); // Coral 1
 
         // Align limelight to april tag
-        driverController.rightTrigger().whileTrue(new AlignLimelight(s_Swerve, -0.12, 0.3)); // Left
-        driverController.leftTrigger().whileTrue(new AlignLimelight(s_Swerve, 0.2, 0.3)); // Right
+        // TODO: We can correct alignment by having the robot stop further back (say 0.4 instead of 0.3), then driving forward with TimedDrive.
+        driverController.rightTrigger().whileTrue(new AlignLimelightReef(s_Swerve, -0.12, 0.3)); // Left
+        driverController.leftTrigger().whileTrue(new AlignLimelightReef(s_Swerve, 0.2, 0.3)); // Right
 
         /* Operator Controller */
         operatorController.a().onTrue(coral.coralServo(0.25)); // Coral down
@@ -159,10 +167,13 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
 
         // Limelight autonomous commands
-        Command align_left = new AlignLimelight(s_Swerve, 0.2, 0.3);
-        Command align_right = new AlignLimelight(s_Swerve, -0.12, 0.3);
-        NamedCommands.registerCommand("alignLimelightLeft", align_left);
-        NamedCommands.registerCommand("alignLimelightRight", align_right);
+        Command reef_align_left = new AlignLimelightReef(s_Swerve, 0.2, 0.3);
+        Command reef_align_right = new AlignLimelightReef(s_Swerve, -0.12, 0.3);
+        NamedCommands.registerCommand("reefAlignLimelightLeft", reef_align_left);
+        NamedCommands.registerCommand("reefAlignLimelightRight", reef_align_right);
+
+        Command coral_station_align = new AlignLimelightCoral(s_Swerve, 0.2, 0.3);
+        NamedCommands.registerCommand("coralStationAlignLimelight", coral_station_align);
 
         // Elevator autonomous commands
         Command elevator_down = elevator.setElevatorPositionAutonomous(0);

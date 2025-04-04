@@ -3,18 +3,20 @@ package frc.robot.commands.Swerve;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.Constants.LimelightValues;
 import frc.robot.subsystems.Limelight.LimelightData;
 import frc.robot.subsystems.swerve.SwerveBase;
+import frc.robot.commands.Swerve.TimedDrive;
 
 
-public class AlignLimelight extends Command {
+public class AlignLimelightCoral extends Command {
     private SwerveBase Swerve;
-    private double lateral_offset = LimelightValues.lateral_offset;
-    private double longitudinal_offset = LimelightValues.longitudinal_offset;
+    private double lateral_offset = 0;
+    private double longitudinal_offset = 0;
 
-    public AlignLimelight(
+    public AlignLimelightCoral(
             SwerveBase Swerve,
             double lateral_offset,
             double longitudinal_offset) {
@@ -25,7 +27,7 @@ public class AlignLimelight extends Command {
     }
 
     public double[] AimLimelight(double lateral_offset, double longitudinal_offset) {
-        double[] targetpose = LimelightData.getTargetpose(); // AprilTag location in Robot coordinate system {tx, ty, tz, roll, pitch, yaw}
+        double[] targetpose = LimelightData.getTargetposeCoral(); // AprilTag location in Robot coordinate system {tx, ty, tz, roll, pitch, yaw}
 
         double tx = targetpose[0];
         double tz = targetpose[2];
@@ -38,39 +40,9 @@ public class AlignLimelight extends Command {
         return new double[] {translationSpeed, strafeSpeed, angularVelocity};
     }
 
-    // private void walkForward() {
-    //     class TimedCommand extends Command {
-    //         public TimedCommand(double time){
-    //             setTimeout(0.5);
-    //         }
-
-    //         public void initialize() {
-    //             setTimeout(.9);
-    //         }
-            
-    //         public void execute() {
-    //             Swerve.drive(
-    //                 new Translation2d(0, 0.1),
-    //                 0,
-    //                 false, 
-    //                 true
-    //             );
-    //         }
-            
-    //         public boolean isFinished() {
-    //             return isTimedOut();
-    //         }
-            
-    //         public void end() {
-    //             Swerve.drive(
-    //                 new Translation2d(0, 0),
-    //                 0,
-    //                 false, 
-    //                 true
-    //             );
-    //         }
-    //     }
-    // }
+    private WaitCommand walkForward() {
+        return new TimedDrive(Swerve, 1.0, 0, 0.5, 0);
+    }
 
     @Override
     public void initialize() {
@@ -116,7 +88,7 @@ public class AlignLimelight extends Command {
  
     @Override
     public void end(boolean interrupted){
-        // walkForward();
+        walkForward();
 
         //When the command ends stop the robot moving
         Swerve.drive(

@@ -13,29 +13,42 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Limelight {
     static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    static NetworkTableEntry tv = table.getEntry("tv");
-    static NetworkTableEntry targetpose_robotspace = table.getEntry("targetpose_robotspace");
+    static NetworkTableEntry tv_reef = table.getEntry("tv_reef");
+    static NetworkTableEntry targetpose_robotspace_reef = table.getEntry("targetpose_robotspace_reef");
+    static NetworkTableEntry tv_coral = table.getEntry("tv_coral");
+    static NetworkTableEntry targetpose_robotspace_coral = table.getEntry("targetpose_robotspace_coral");
 
-    public static long isTarget; 
-    public static double[] targetpose;
+    public static long isTargetReef; 
+    public static long isTargetCoral; 
+
+    public static double[] targetposeReef;
+    public static double[] targetposeCoral;
+
 
     public static class LimelightData {
         public static void update() {
             // Boolean if an AprilTag is detected
-            isTarget = tv.getInteger(0);
+            isTargetReef = tv_reef.getInteger(0);
+            isTargetCoral = tv_coral.getInteger(0);
 
             // AprilTag location in Robot coordinate system {tx, ty, tz, roll, pitch, yaw}
-            targetpose = targetpose_robotspace.getDoubleArray(new double[6]);
+            targetposeReef = targetpose_robotspace_reef.getDoubleArray(new double[6]);
+            targetposeCoral = targetpose_robotspace_coral.getDoubleArray(new double[6]);
         }
 
         public static Boolean isValidTarget() {
             update();
-            return (isTarget == 1);
+            return (isTargetReef == 1 || isTargetCoral == 1);
         }
 
-        public static double[] getTargetpose() {
+        public static double[] getTargetposeReef() {
             update();
-            return targetpose;
+            return targetposeReef;
+        }
+
+        public static double[] getTargetposeCoral() {
+            update();
+            return targetposeCoral;
         }
 
         public static void setIdle() {
