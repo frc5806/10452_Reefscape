@@ -197,6 +197,16 @@ public class RobotContainer {
         NamedCommands.registerCommand("coralIntake", coral_intake);
         NamedCommands.registerCommand("coralShoot", coral_shoot);
 
+        Command algae_up = algae.algaeServoAutonomous(0.8);
+        Command algae_down = algae.algaeServoAutonomous(0.25);
+        Command algae_intake = algae.algaeMotorAutonomous(1);
+        Command algae_shoot = algae.algaeMotorAutonomous(-1);
+        NamedCommands.registerCommand("algaeServoUp", algae_up);
+        NamedCommands.registerCommand("algaeServoDown", algae_down);
+        NamedCommands.registerCommand("algaeIntake", algae_intake);
+        NamedCommands.registerCommand("algaeShoot", algae_shoot);
+
+
         // Register a specific auto from PathPlanner (that uses the above named commands) as our routine to run
         PathPlannerAuto autoCommand = new PathPlannerAuto("PracticeAuto");
         return autoCommand;

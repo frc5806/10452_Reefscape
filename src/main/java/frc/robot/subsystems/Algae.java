@@ -47,4 +47,56 @@ public class Algae extends SubsystemBase {
             () -> { algaeMotor.set(speed); }
         );
     }
+
+
+    //Algae motor command for autonomous (needs to have an "end" state)
+    public Command algaeMotorAutonomous(double speed) {
+        Command autoCommand = new Command() {
+            private boolean reached_speed = false;
+            public void execute() {
+                algaeMotor.set(speed);
+            }
+ 
+            public boolean isFinished() {
+                if (algaeMotor.getEncoder().getVelocity() > 2000 && speed > 0) {
+                    reached_speed = true;
+                }
+    
+                if (algaeMotor.getEncoder().getVelocity() < -2000 && speed < 0) {
+                    return true;
+                } else if (algaeMotor.getEncoder().getVelocity() < 1000 && reached_speed && speed > 0) {
+                    return true;
+                }
+                return false;
+            }
+
+            public void end(boolean interrupted) {
+                algaeMotor.set(0);
+            }
+        };
+
+        return autoCommand;
+    }
+
+    //Algae method for autonomous
+    public Command algaeServoAutonomous(double position) {
+        Command autoCommand = new Command() {
+            public void initialize() {
+                algaeServo1.set(position);
+                algaeServo2.set(position);
+            }
+ 
+            public boolean isFinished() {
+                if (Math.abs(algaeServo1.get() - position) < 0.1) {
+                    return true;
+                }
+                return false;
+            }
+
+            public void end(boolean interrupted) {
+            }
+        };
+
+        return autoCommand;
+    }
 }
