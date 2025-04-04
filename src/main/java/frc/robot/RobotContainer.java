@@ -22,11 +22,14 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.swerve.SwerveBase;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Limelight.LimelightData;
+import frc.robot.Constants.Swerve;
 /* Command Imports */
 import frc.robot.commands.DriveToPoseCommand;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.Swerve.AlignLimelightCoral;
 import frc.robot.commands.Swerve.AlignLimelightReef;
+import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.commands.Swerve.TimedDrive;
+
 
 public class RobotContainer {
     /* Shuffleboard */
@@ -99,25 +102,24 @@ public class RobotContainer {
         driverController.y().onFalse(climb.climbMotor(0, 0));
 
         // Climb in
-        driverController.a().whileTrue(climb.climbMotor(0, -0.4));
+        driverController.a().whileTrue(climb.climbMotor(0, -0.6));
         driverController.a().onFalse(climb.climbMotor(0, 0));
 
         // Climb out
-        driverController.x().whileTrue(climb.climbMotor(0, 0.4));
+        driverController.x().whileTrue(climb.climbMotor(0, 0.6));
         driverController.x().onFalse(climb.climbMotor(0, 0));
         // driverController.b().onTrue(new InstantCommand(() -> elevator.resetEncoder()));
 
         // driverController.y().onTrue(new InstantCommand(() -> System.out.println(elevator.getEncoderPos())));
-        
-        // Align to coral station
-        driverController.start().whileTrue(new AlignLimelightCoral(s_Swerve, 0.2, 0.3));
 
         // Align to algae on Reef
-        driverController.back().whileTrue(new AlignLimelightReef(s_Swerve, 0.04, 0.3));
+        driverController.back().whileTrue(new AlignLimelightReef(s_Swerve, -0.09, 0.3));
+
+        driverController.start().onTrue(new TimedDrive(s_Swerve, 0.5, 0.25, 0, 0));
 
         //Run elevator with POV and bumpers
         driverController.rightBumper().onTrue(elevator.setElevatorPosition(-16.5)); // Algae 3
-        driverController.leftBumper().onTrue(elevator.setElevatorPosition(-9.75)); // Algae 2
+        driverController.leftBumper().onTrue(elevator.setElevatorPosition(-10.5)); // Algae 2
         
         // Reset swerve odometry
         driverController.povUp().onTrue(new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(0, 0, new Rotation2d()))));
@@ -128,8 +130,8 @@ public class RobotContainer {
 
         // Align limelight to april tag
         // TODO: We can correct alignment by having the robot stop further back (say 0.4 instead of 0.3), then driving forward with TimedDrive.
-        driverController.rightTrigger().whileTrue(new AlignLimelightReef(s_Swerve, -0.12, 0.3)); // Left
-        driverController.leftTrigger().whileTrue(new AlignLimelightReef(s_Swerve, 0.2, 0.3)); // Right
+        driverController.rightTrigger().whileTrue(new AlignLimelightReef(s_Swerve, -0.12, 0.4)); // Left
+        driverController.leftTrigger().whileTrue(new AlignLimelightReef(s_Swerve, 0.2, 0.4)); // Right
 
         /* Operator Controller */
         operatorController.a().onTrue(coral.coralServo(0.25)); // Coral down
@@ -138,25 +140,25 @@ public class RobotContainer {
         
         operatorController.b().onTrue(algae.algaeServo(0)); // Algae down
         
-        operatorController.y().onTrue(algae.algaeServo(0.7)); // Algae up
+        operatorController.y().onTrue(algae.algaeServo(0.8)); // Algae up
 
         operatorController.start().onTrue(algae.algaeServo(0.2)); // Algae intake
 
         // Coral in
-        operatorController.leftBumper().whileTrue(coral.coralMotor(0.4));
-        operatorController.leftBumper().whileFalse(coral.coralMotor(0));
+        operatorController.rightBumper().whileTrue(coral.coralMotor(0.4));
+        operatorController.rightBumper().whileFalse(coral.coralMotor(0));
     
         // Coral out
-        operatorController.leftTrigger().whileTrue(coral.coralMotor(-0.4));
-        operatorController.leftTrigger().whileFalse(coral.coralMotor(0));
+        operatorController.rightTrigger().whileTrue(coral.coralMotor(-0.4));
+        operatorController.rightTrigger().whileFalse(coral.coralMotor(0));
 
         // Algae in
-        operatorController.rightTrigger().whileTrue(algae.algaeMotor(0.8));
-        operatorController.rightTrigger().whileFalse(algae.algaeMotor(0));
+        operatorController.leftTrigger().whileTrue(algae.algaeMotor(0.8));
+        operatorController.leftTrigger().whileFalse(algae.algaeMotor(0));
 
         // Algae out
-        operatorController.rightBumper().whileTrue(algae.algaeMotor(-0.6));
-        operatorController.rightBumper().whileFalse(algae.algaeMotor(0));
+        operatorController.leftBumper().whileTrue(algae.algaeMotor(-0.6));
+        operatorController.leftBumper().whileFalse(algae.algaeMotor(0));
     }
 
     /**
@@ -171,9 +173,6 @@ public class RobotContainer {
         Command reef_align_right = new AlignLimelightReef(s_Swerve, -0.12, 0.3);
         NamedCommands.registerCommand("reefAlignLimelightLeft", reef_align_left);
         NamedCommands.registerCommand("reefAlignLimelightRight", reef_align_right);
-
-        Command coral_station_align = new AlignLimelightCoral(s_Swerve, 0.2, 0.3);
-        NamedCommands.registerCommand("coralStationAlignLimelight", coral_station_align);
 
         // Elevator autonomous commands
         Command elevator_down = elevator.setElevatorPositionAutonomous(0);
@@ -208,7 +207,7 @@ public class RobotContainer {
 
 
         // Register a specific auto from PathPlanner (that uses the above named commands) as our routine to run
-        PathPlannerAuto autoCommand = new PathPlannerAuto("PracticeAuto");
+        PathPlannerAuto autoCommand = new PathPlannerAuto("FirstMovement");
         return autoCommand;
     }
 }

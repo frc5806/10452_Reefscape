@@ -5,6 +5,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "coralServoUp"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -30,15 +36,21 @@
           }
         },
         {
+          "type": "path",
+          "data": {
+            "pathName": "Primary movement adjust"
+          }
+        },
+        {
           "type": "named",
           "data": {
             "name": "elevatorReefL2"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "coralShoot"
+            "waitTime": 1.0
           }
         },
         {
@@ -58,6 +70,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Secondary movment"
           }
         }
       ]

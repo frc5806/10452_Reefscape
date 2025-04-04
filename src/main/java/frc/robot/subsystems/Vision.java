@@ -19,7 +19,7 @@ public class Vision extends SubsystemBase {
                 // Get the UsbCamera from CameraServer
                 UsbCamera camera = CameraServer.startAutomaticCapture();
                 // Set the resolution
-                camera.setResolution(1080, 720);
+                camera.setResolution(640, 460);
                 System.out.println(camera.getBrightness());
 
                 // Get a CvSink. This will capture Mats from the camera

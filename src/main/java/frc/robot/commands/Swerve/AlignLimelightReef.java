@@ -32,6 +32,7 @@ public class AlignLimelightReef extends Command {
         double tx = targetpose[0];
         double tz = targetpose[2];
         double y_rot = targetpose[4];
+        // System.out.println(y_rot);
 
         double translationSpeed = (tz - longitudinal_offset);
         double strafeSpeed = -(tx - lateral_offset);
@@ -40,8 +41,8 @@ public class AlignLimelightReef extends Command {
         return new double[] {translationSpeed, strafeSpeed, angularVelocity};
     }
 
-    private WaitCommand walkForward() {
-        return new TimedDrive(Swerve, 1.0, 0, 0.5, 0);
+    private Command walkForward() {
+        return new TimedDrive(Swerve, 0.5, 0.25, 0, 0);
     }
 
     @Override
@@ -88,7 +89,7 @@ public class AlignLimelightReef extends Command {
  
     @Override
     public void end(boolean interrupted){
-        walkForward();
+        walkForward().schedule();
 
         //When the command ends stop the robot moving
         Swerve.drive(
