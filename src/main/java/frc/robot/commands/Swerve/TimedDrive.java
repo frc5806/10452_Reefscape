@@ -35,15 +35,15 @@ public class TimedDrive extends Command {
         );
     }
 
-    // @Override
-    // public void execute() {
-    //     Swerve.drive(
-    //         new Translation2d(x, y),
-    //         rotation,
-    //         false, 
-    //         true
-    //     );
-    // }
+    @Override
+    public void execute() {
+        Swerve.drive(
+            new Translation2d(x, y),
+            rotation,
+            false, 
+            true
+        );
+    }
 
     @Override
     public void end(boolean interrupted) {

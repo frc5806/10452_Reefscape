@@ -6,6 +6,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import com.revrobotics.spark.config.SparkMaxConfig;
@@ -87,7 +88,7 @@ public class Algae extends SubsystemBase {
             }
  
             public boolean isFinished() {
-                if (Math.abs(algaeServo1.get() - position) < 0.1) {
+                if (Math.abs(algaeServo1.get() - position) < 0.5) {
                     return true;
                 }
                 return false;
@@ -99,4 +100,45 @@ public class Algae extends SubsystemBase {
 
         return autoCommand;
     }
+
+
+    public Command algaeMotorTimed(double speed, double time) {
+        class TimedAlgae extends Command {
+            private double speed;
+            protected Timer m_timer = new Timer();
+
+            private final double m_duration;
+
+            public TimedAlgae(double speed, double time) {
+                this.speed = speed;
+                m_duration = time;
+            }
+
+            @Override
+            public void initialize() {
+                m_timer.restart();
+
+                algaeMotor.set(speed);
+            }
+
+            @Override
+            public void execute() {
+                algaeMotor.set(speed);
+            }
+
+            @Override
+            public void end(boolean interrupted) {
+                m_timer.stop();
+
+                algaeMotor.set(0);
+            }
+
+            @Override
+            public boolean isFinished() {
+                return m_timer.hasElapsed(m_duration);
+            }
+        }
+        return new TimedAlgae(speed, time);
+    }
+
 }

@@ -1,0 +1,165 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "coralServoUp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "algaeServoUp"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Rotate in Place opposite"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Primary movement opposite"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "reefAlignLimelightRight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "elevatorReefL2"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "coralServoDown"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "coralShoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "coralServoUp"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "elevatorDown"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Secondary movement opposite"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "coralIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Tertiary movement opposite"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "reefAlignLimelightRight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "elevatorReefL3"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "coralServoDown"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "coralShoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "coralServoUp"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "elevatorDown"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.lib.util.XboxController2;
 /* Subsystem Imports */
@@ -29,6 +32,7 @@ import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.Swerve.AlignLimelightReef;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.commands.Swerve.TimedDrive;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 
 public class RobotContainer {
@@ -94,31 +98,32 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Controller */
         // Climb in
-        driverController.b().whileTrue(climb.climbMotor(0.6, 0));
+        driverController.b().whileTrue(climb.climbMotor(0.1, 0));
         driverController.b().onFalse(climb.climbMotor(0, 0));
 
         // Climb out
-        driverController.y().whileTrue(climb.climbMotor(-0.6, 0));
+        driverController.y().whileTrue(climb.climbMotor(-0.1, 0));
         driverController.y().onFalse(climb.climbMotor(0, 0));
 
         // Climb in
-        driverController.a().whileTrue(climb.climbMotor(0, -0.6));
+        driverController.a().whileTrue(climb.climbMotor(0, -0.7));
         driverController.a().onFalse(climb.climbMotor(0, 0));
 
         // Climb out
-        driverController.x().whileTrue(climb.climbMotor(0, 0.6));
+        driverController.x().whileTrue(climb.climbMotor(0, 0.7));
         driverController.x().onFalse(climb.climbMotor(0, 0));
         // driverController.b().onTrue(new InstantCommand(() -> elevator.resetEncoder()));
 
         // driverController.y().onTrue(new InstantCommand(() -> System.out.println(elevator.getEncoderPos())));
 
         // Align to algae on Reef
-        driverController.back().whileTrue(new AlignLimelightReef(s_Swerve, -0.09, 0.3));
+        driverController.back().whileTrue(new AlignLimelightReef(s_Swerve, -0.03, 0.4));
+        // driverController.back().onTrue(coral.coralMotorTimed(0.4, 0.5));
 
         driverController.start().onTrue(new TimedDrive(s_Swerve, 0.5, 0.25, 0, 0));
 
         //Run elevator with POV and bumpers
-        driverController.rightBumper().onTrue(elevator.setElevatorPosition(-16.5)); // Algae 3
+        driverController.rightBumper().onTrue(elevator.setElevatorPosition(-17)); // Algae 3
         driverController.leftBumper().onTrue(elevator.setElevatorPosition(-10.5)); // Algae 2
         
         // Reset swerve odometry
@@ -140,9 +145,7 @@ public class RobotContainer {
         
         operatorController.b().onTrue(algae.algaeServo(0)); // Algae down
         
-        operatorController.y().onTrue(algae.algaeServo(0.8)); // Algae up
-
-        operatorController.start().onTrue(algae.algaeServo(0.2)); // Algae intake
+        operatorController.y().onTrue(algae.algaeServo(0.85)); // Algae up
 
         // Coral in
         operatorController.rightBumper().whileTrue(coral.coralMotor(0.4));
@@ -159,6 +162,48 @@ public class RobotContainer {
         // Algae out
         operatorController.leftBumper().whileTrue(algae.algaeMotor(-0.6));
         operatorController.leftBumper().whileFalse(algae.algaeMotor(0));
+
+        SequentialCommandGroup L3FullAuto = new SequentialCommandGroup(
+            elevator.setElevatorPositionAutonomous(-13.25),
+            //coral.coralServoAutonomous(0.25),
+            new WaitCommand(3),
+            coral.coralMotorTimed(-0.4, 0.5),
+            elevator.setElevatorPositionAutonomous(0),
+            coral.coralServoAutonomous(0.82)
+        );
+
+        SequentialCommandGroup L2FullAuto = new SequentialCommandGroup(
+            elevator.setElevatorPositionAutonomous(-6.25),
+            coral.coralServoAutonomous(0.25),
+            new WaitCommand(3),
+            coral.coralMotorTimed(-0.4, 0.5),
+            elevator.setElevatorPositionAutonomous(0),
+            coral.coralServoAutonomous(0.82)
+        );
+
+        SequentialCommandGroup AlgaeL3FullAuto = new SequentialCommandGroup(
+            elevator.setElevatorPositionAutonomous(-17),
+            algae.algaeServoAutonomous(0.8),
+            new WaitCommand(4),
+            algae.algaeMotorTimed(-0.6, 1),
+            elevator.setElevatorPositionAutonomous(0),
+            algae.algaeServoAutonomous(0)
+        );
+    
+        SequentialCommandGroup AlgaeL2FullAuto = new SequentialCommandGroup(
+            elevator.setElevatorPositionAutonomous(-10.5),
+            algae.algaeServoAutonomous(0.8),
+            new WaitCommand(4),
+            algae.algaeMotorTimed(-0.6, 1),
+            elevator.setElevatorPositionAutonomous(0),
+            algae.algaeServoAutonomous(0)
+        );
+
+        operatorController.start().onTrue(L3FullAuto); // Algae intake
+        operatorController.back().onTrue(L2FullAuto); // Algae intake
+        operatorController.povUp().onTrue(AlgaeL3FullAuto);
+        operatorController.povDown().onTrue(AlgaeL2FullAuto);
+
     }
 
     /**
@@ -195,6 +240,11 @@ public class RobotContainer {
         NamedCommands.registerCommand("coralServoDown", coral_down);
         NamedCommands.registerCommand("coralIntake", coral_intake);
         NamedCommands.registerCommand("coralShoot", coral_shoot);
+
+        Command coral_intake_time = coral.coralMotorTimed(0.4, 1.5);
+        Command coral_shoot_time = coral.coralMotorTimed(-0.4, 1.5);
+        NamedCommands.registerCommand("coralIntakeTime", coral_intake_time);
+        NamedCommands.registerCommand("coralShootTime", coral_shoot_time);
 
         Command algae_up = algae.algaeServoAutonomous(0.8);
         Command algae_down = algae.algaeServoAutonomous(0.25);

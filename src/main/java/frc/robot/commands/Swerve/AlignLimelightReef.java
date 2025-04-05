@@ -42,7 +42,7 @@ public class AlignLimelightReef extends Command {
     }
 
     private Command walkForward() {
-        return new TimedDrive(Swerve, 0.5, 0.25, 0, 0);
+        return new TimedDrive(Swerve, 0.75, 0.15, 0, 0);
     }
 
     @Override

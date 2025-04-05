@@ -102,7 +102,7 @@ public class Elevator extends SubsystemBase {
             //Check if finished based on some linear relationship experimentally determined between setpoint and encoder position
             public boolean isFinished() {
                 double threshold = Constants.ElevatorConstants.thresholdFunction(setpoint);
-                return Math.abs(getEncoderPos() - setpoint) < threshold;
+                return Math.abs(getEncoderPos() - setpoint) < threshold*2;
             }
 
             public void end(boolean interrupted) {

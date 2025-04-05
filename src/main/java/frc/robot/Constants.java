@@ -167,9 +167,9 @@ public final class Constants {
         public static final double longitudinal_offset = 0;
 
         //What is the margin of error acceptable on the limelight (if you set it to 0 it will continue trying to make tiny modifications indefinatly)
-        public static final double maxRotationError = 0.5;
-        public static final double maxSideToSideError = 0.5;
-        public static final double maxInOutError = 0.05;
+        public static final double maxRotationError = 0.25;
+        public static final double maxSideToSideError = 0.25;
+        public static final double maxInOutError = 0.125;
     }
 
     public static final class AutoConstants {
