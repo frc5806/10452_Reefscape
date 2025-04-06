@@ -7,6 +7,12 @@
         {
           "type": "named",
           "data": {
+            "name": "algaeServoUp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "coralServoUp"
           }
         },
@@ -25,37 +31,7 @@
         {
           "type": "named",
           "data": {
-            "name": "elevatorReefL2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "coralServoDown"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "elevatorDown"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "coralServoUp"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "name": "elevatorReefL3Score"
           }
         },
         {

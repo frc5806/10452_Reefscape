@@ -15,14 +15,17 @@ public class AlignLimelightReef extends Command {
     private SwerveBase Swerve;
     private double lateral_offset = 0;
     private double longitudinal_offset = 0;
+    private boolean walk = true;
 
     public AlignLimelightReef(
             SwerveBase Swerve,
             double lateral_offset,
-            double longitudinal_offset) {
+            double longitudinal_offset,
+            boolean walk) {
         this.Swerve = Swerve;
         this.lateral_offset = lateral_offset;
         this.longitudinal_offset = longitudinal_offset;
+        this.walk = walk;
         addRequirements(Swerve);
     }
 
@@ -89,7 +92,9 @@ public class AlignLimelightReef extends Command {
  
     @Override
     public void end(boolean interrupted){
-        walkForward().schedule();
+        if (walk) {
+            walkForward().schedule();
+        }
 
         //When the command ends stop the robot moving
         Swerve.drive(

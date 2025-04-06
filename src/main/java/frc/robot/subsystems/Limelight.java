@@ -12,6 +12,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
  */
 
 public class Limelight {
+    
     static NetworkTable table_reef = NetworkTableInstance.getDefault().getTable("limelight-reef");
     static NetworkTableEntry tv_reef = table_reef.getEntry("tv");
     static NetworkTableEntry targetpose_robotspace_reef = table_reef.getEntry("targetpose_robotspace");

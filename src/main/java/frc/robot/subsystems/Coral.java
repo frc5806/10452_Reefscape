@@ -48,7 +48,7 @@ public class Coral extends SubsystemBase {
             }
  
             public boolean isFinished() {
-                if (Math.abs(coralServo.get() - position) < 0.1) {
+                if (Math.abs(coralServo.get() - position) < 0.2) {
                     return true;
                 }
                 return false;

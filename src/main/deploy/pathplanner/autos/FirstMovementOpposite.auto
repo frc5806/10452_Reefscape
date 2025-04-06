@@ -35,52 +35,15 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "elevatorReefL2"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
+            "pathName": "Primary movement adjust opposite"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "coralServoDown"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "coralShoot"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "coralServoUp"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "elevatorDown"
-                }
-              }
-            ]
+            "name": "elevatorReefL2Score"
           }
         },
         {
@@ -92,7 +55,7 @@
         {
           "type": "named",
           "data": {
-            "name": "coralIntake"
+            "name": "coralIntakeTime"
           }
         },
         {
@@ -110,50 +73,7 @@
         {
           "type": "named",
           "data": {
-            "name": "elevatorReefL3"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "coralServoDown"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "coralShoot"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "coralServoUp"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "elevatorDown"
-                }
-              }
-            ]
+            "name": "elevatorReefL3Score"
           }
         }
       ]
